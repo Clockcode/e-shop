@@ -480,10 +480,7 @@ const CategoryProducts = ({ catSlug }) => {
                 <Link to={`${catSlug}/${item.slug}`}>
                   <span id={catProductsStyle.best}>BEST</span>
                   <img
-                    src={
-                      item.Variations[0].ProductImages[0].formats.medium
-                        .childImageSharp.fluid.src
-                    }
+                    src={item.Variations[0].ProductImages[0].url}
                     alt={item.Variations[0].ProductImages[0].caption}
                   />
                 </Link>

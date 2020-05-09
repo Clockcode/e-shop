@@ -34,15 +34,7 @@ export const query = graphql`
           Quantity
           ProductImages {
             caption
-            formats {
-              medium {
-                childImageSharp {
-                  fluid {
-                    src
-                  }
-                }
-              }
-            }
+            url
           }
         }
         ProductFilterSettings {
