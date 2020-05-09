@@ -56,23 +56,8 @@ const Header = ({ siteTitle, categories, otherPages }) => {
           </Link>
         </h1>
       </span>
-      {isMobileState ? (
-        <React.Fragment>
-          <div className={headerStyle.mobileWrapper}>
-            <a>
-              <img src={user}></img>
-            </a>
-            <a>
-              <img src={search}></img>
-            </a>
-            <a>
-              <img src={bag}></img>
-            </a>
-          </div>
-        </React.Fragment>
-      ) : (
-        <Dashboard />
-      )}
+
+      <Dashboard />
     </header>
   )
 }

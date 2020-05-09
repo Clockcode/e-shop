@@ -65,6 +65,21 @@ module.exports = {
     //   },
     // },
     {
+      resolve: `gatsby-source-strapi`,
+      options: {
+        apiURL: `http://localhost:1337`,
+        queryLimit: 1000, // Default to 100
+        contentTypes: [`user`],
+        // If using single types place them in this array.
+        singleTypes: [`home-page`],
+        // // Possibility to login with a strapi user, when content types are not publically available (optional).
+        loginData: {
+          identifier: "manager",
+          password: "Cagdasozan1912!",
+        },
+      },
+    },
+    {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: `Leather Jacket Store`,

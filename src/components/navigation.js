@@ -33,13 +33,13 @@ const Navigation = ({ categories, otherPages }) => {
     if (categories != undefined && otherPages != undefined) {
       categories.map(item => {
         tempArray.push({
-          title: item.title.title,
+          title: item.Title,
           slug: item.slug,
         })
       })
       otherPages.map(item => {
         tempArray.push({
-          title: item.title,
+          title: item.Title,
           slug: item.slug,
         })
       })
@@ -95,7 +95,7 @@ const Navigation = ({ categories, otherPages }) => {
               {navCategories.map(item => {
                 return (
                   <span className={navigationStyle.navItem}>
-                    <Link to={`/${item.slug}`}>{item.title}</Link>
+                    <Link to={`/${item.slug}`}>{item.Title}</Link>
                   </span>
                 )
               })}

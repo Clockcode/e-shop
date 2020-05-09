@@ -1,7 +1,8 @@
 import React from "react"
 
+import Signin from "../components/signin"
+
 import navigationStyle from "./styles/navigation.module.scss"
-import user from "../images/user.svg"
 import heart from "../images/heart.svg"
 import canada from "../images/canada.svg"
 import bag from "../images/bag.svg"
@@ -11,10 +12,7 @@ const Dashboard = () => {
   return (
     <div className={navigationStyle.dashboard}>
       <div className={navigationStyle.dashboardElements}>
-        <span className={navigationStyle.navItem}>
-          <a className={navigationStyle.right}>Sign in</a>
-          <img src={user}></img>
-        </span>
+        <Signin />
         <span className={navigationStyle.navItem}>
           <a className={navigationStyle.right}>Favorites</a>
           <img src={heart}></img>

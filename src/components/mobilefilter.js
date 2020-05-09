@@ -5,8 +5,6 @@ import gql from "graphql-tag"
 
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
 
-import { client } from "../../wrap-with-provider"
-
 import {
   handlePriceFilter,
   checkedPriceFilters,
@@ -16,13 +14,6 @@ import {
   uncheckedStyledFilters,
   uncheckedseasonTypeFilters,
 } from "../state/actions/filterActions"
-
-import {
-  filterByPrice,
-  fetchCategories,
-  filterByPriceAdd,
-  filterByPriceRemove,
-} from "../state/actions/categoryActions"
 
 import OtherFilters from "./otherfilters"
 
@@ -34,8 +25,8 @@ const customStyles = {
     // margin: "0 auto",
     position: "absolute",
     margin: "0",
-    height: '500px', // <-- This sets the height
-    overlfow: 'scroll', // <-- This tells the modal to scrol
+    height: "500px", // <-- This sets the height
+    overlfow: "scroll", // <-- This tells the modal to scrol
     padding: "1.6rem",
     // margin: ".5rem 0",
     width: "25rem",
@@ -215,7 +206,7 @@ const MobileFilter = ({ catSlug, products }) => {
   }
 
   // Creatinf Filters Dynamically
-  const renderFilters = () => { }
+  const renderFilters = () => {}
 
   useEffect(() => {
     dispatch(uncheckedPriceFilters())
@@ -236,7 +227,7 @@ const MobileFilter = ({ catSlug, products }) => {
         style={customStyles}
         contentLabel="Filter Modal"
         closeTimeoutMS={200}
-      // shouldCloseOnOverlayClick={true}
+        // shouldCloseOnOverlayClick={true}
       >
         <div
           onClick={() => {
