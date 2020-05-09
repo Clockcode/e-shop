@@ -7,6 +7,7 @@ import SEO from "../components/seo"
 import MainpageIntro from "../components/mainpageintro"
 import BelowSection from "../components/belowsection"
 import MailSignup from "../components/mailsignup"
+import Footer from "../components/footer"
 import FeaturedProduct from "../components/featuredproduct"
 import Header from "../components/header"
 import headerStyle from "../components/styles/header.module.scss"
@@ -103,14 +104,14 @@ export const pageQuery = graphql`
       edges {
         node {
           HomePageTitle
+          SiteTitle
+          Description
           Seo {
             SiteTitle
             Description
             Canonical
             Keywords
           }
-          SiteTitle
-          Description
           product {
             id
             ProductName
@@ -128,13 +129,12 @@ export const pageQuery = graphql`
               id
               createdAt
               ProductImages {
-                formats {
-                  medium {
-                    url
-                  }
-                }
+                url
               }
             }
+          }
+          BelowImages {
+            url
           }
           Footer {
             footer_company_pages {
@@ -159,6 +159,18 @@ export const pageQuery = graphql`
               slug
             }
           }
+          Banner {
+            BannerImage {
+              Caption
+              Image{
+                childImageSharp {
+                  fluid {
+                    src
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -169,13 +181,13 @@ const IndexPage = ({ data }) => {
   // let imageUrl = `https:${data.allContentfulMainPage.nodes[0].mainImage.fluid.src}`
   console.info("ozan", data)
 
-  // let womenImage = `https:${data.allContentfulMainPage.nodes[0].firstRow[0].fluid.src}`
+  let womenImage = `${data.allStrapiHomePage.edges[0].node.Banner.BannerImage[0].Image.url}`
 
-  // let menImage = `https:${data.allContentfulMainPage.nodes[0].firstRow[1].fluid.src}`
-  // let bannerImage = `https:${data.allContentfulMainPage.nodes[0].firstRow[2].fluid.src}`
+  let menImage = `${data.allStrapiHomePage.edges[0].node.Banner.BannerImage[1].Image.url}`
+  // let bannerImage = `${data.allStrapiHomePage.edges[0].node.firstRow[2].fluid.src}`
 
-  // let firstImage = `https:${data.allContentfulMainPage.nodes[0].secondRow[0].fluid.src}`
-  // let secondImage = `https:${data.allContentfulMainPage.nodes[0].secondRow[1].fluid.src}`
+  let firstImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[0].url}`
+  let secondImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[1].url}`
   let description = data.allStrapiHomePage.edges[0].node.Description
 
   // let longDescription =
@@ -183,8 +195,9 @@ const IndexPage = ({ data }) => {
 
   let featuredProducts = data.allStrapiHomePage.edges[0].node.product
   let seoTemp = data.allStrapiHomePage.edges[0].node.Seo
-  let navTemp = data
-
+  let navTemp = data.allStrapiHomePage.edges[0].node
+  let companyPages = data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
+  let helpPages = data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
   return (
     <Layout>
       <SEO
@@ -195,22 +208,22 @@ const IndexPage = ({ data }) => {
         canonical={seoTemp.Canonical}
       />
       <Header
-        categories={navTemp.allStrapiHomePage.edges[0].node.categories}
-        otherPages={navTemp.allStrapiHomePage.edges[0].node.menu_other_pages}
+        categories={navTemp.NavigationMenu.categories}
+        otherPages={navTemp.NavigationMenu.menu_other_pages}
         className={headerStyle.navigation}
-        siteTitle={"DERRY"}
+        siteTitle={navTemp.HomePageTitle}
       />
       <MainpageIntro
-      // womenImage={womenImage}
-      // womeImageTitle={data.allContentfulMainPage.nodes[0].firstRow[0].title}
-      // menImage={menImage}
-      // menImageTitle={data.allContentfulMainPage.nodes[0].firstRow[1].title}
+        womenImage={womenImage}
+        womenImageTitle={data.allStrapiHomePage.edges[0].node.Banner.BannerImage[0].Caption}
+        menImage={menImage}
+        menImageTitle={data.allStrapiHomePage.edges[0].node.Banner.BannerImage[1].Caption}
       />
       <FeaturedProduct featuredProducts={featuredProducts} />
       <BelowSection
-      // firstImage={firstImage}
+        firstImage={firstImage}
+        secondImage={secondImage}
       // firstImageTitle={data.allContentfulMainPage.nodes[0].secondRow[0].title}
-      // secondImage={secondImage}
       // secondImageTitle={
       //   data.allContentfulMainPage.nodes[0].secondRow[1].title
       // }
@@ -220,6 +233,10 @@ const IndexPage = ({ data }) => {
       <MailSignup description={description} />
       {/* <h1>{data.allContentfulMainPage.nodes[0].mainTitle}</h1> */}
       {/* <img src={imageUrl} alt="Girl in a Leather Jacket" /> */}
+
+      <Footer helpPages={helpPages}
+        companyPages={companyPages}
+      />
     </Layout>
   )
 }

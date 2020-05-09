@@ -39,7 +39,7 @@ const Navigation = ({ categories, otherPages }) => {
       })
       otherPages.map(item => {
         tempArray.push({
-          title: item.Title,
+          title: item.PageTitle,
           slug: item.slug,
         })
       })
@@ -47,7 +47,7 @@ const Navigation = ({ categories, otherPages }) => {
     }
   }
   if (typeof window !== `undefined`) {
-    window.onscroll = function() {
+    window.onscroll = function () {
       styleChanger()
     }
   }
@@ -95,7 +95,7 @@ const Navigation = ({ categories, otherPages }) => {
               {navCategories.map(item => {
                 return (
                   <span className={navigationStyle.navItem}>
-                    <Link to={`/${item.slug}`}>{item.Title}</Link>
+                    <Link to={`/${item.slug}`}>{item.title}</Link>
                   </span>
                 )
               })}
@@ -103,8 +103,8 @@ const Navigation = ({ categories, otherPages }) => {
           ) : null}
         </div>
       ) : (
-        <MobileNavigation />
-      )}
+          <MobileNavigation />
+        )}
     </nav>
   )
 }

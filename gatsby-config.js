@@ -69,13 +69,13 @@ module.exports = {
       options: {
         apiURL: `http://localhost:1337`,
         queryLimit: 1000, // Default to 100
-        contentTypes: [`user`],
+        contentTypes: [`user`, 'product', 'category', 'footer-company-pages', 'footer-help-pages', 'menu-other-pages', 'footer-company-pages', 'brand', 'blog'],
         // If using single types place them in this array.
         singleTypes: [`home-page`],
         // // Possibility to login with a strapi user, when content types are not publically available (optional).
         loginData: {
           identifier: "manager",
-          password: "Cagdasozan1912!",
+          password: process.env.STRAPI_PSSWD,
         },
       },
     },

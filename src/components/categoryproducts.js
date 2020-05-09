@@ -494,14 +494,14 @@ const CategoryProducts = ({ catSlug }) => {
             <h1>Unfortunetely, there is no products in this category.</h1>
           )}
       </section>
-      {categoryProductsState && categoryProductsState.length > 0 ? (
+      {categoryProductsState && (
         <Pagination
           productPerPage={productPerPageState}
           totalProducts={categoryProductsState.length}
           paginate={paginate}
           currentPage={currentPageState}
         />
-      ) : null}
+      )}
     </React.Fragment>
   )
 }

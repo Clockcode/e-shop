@@ -214,6 +214,7 @@
         font-size: 1.2rem;
         margin: -0.5em auto;
       }
+      
     }
   }
 }
@@ -253,6 +254,10 @@
         font-size: 1rem;
         color: #757575;
         padding: 0 0 0 0.5rem;
+      }
+      .discounted {
+        color: rgb(255, 77, 77);
+        text-decoration: line-through black;
       }
     }
   }

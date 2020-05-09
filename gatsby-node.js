@@ -34,80 +34,85 @@ exports.createPages = ({ graphql, actions }) => {
     resolve(
       graphql(
         `
-          {
-            allContentfulBlog {
-              edges {
-                node {
-                  title
-                  slug
-                }
-              }
-            }
-            allContentfulCompanyPage {
-              nodes {
-                slug
-                title
-              }
-            }
-            allContentfulHelpPage {
-              nodes {
-                title
+        {
+          allStrapiBrand {
+            edges {
+              node {
+                BrandName
                 slug
               }
             }
-            allContentfulOtherPages {
-              edges {
-                node {
-                  slug
-                  title
-                }
+          }
+          allStrapiCategory {
+            edges {
+              node {
+                Title
+                slug
               }
             }
-            allContentfulCategory {
-              edges {
-                node {
-                  slug
-                  title {
-                    title
-                  }
-                }
+          }
+          allStrapiFooterCompanyPages {
+            edges {
+              node {
+                PageTitle
+                slug
               }
             }
-            allContentfulProduct {
-              edges {
-                node {
-                  price
+          }
+          allStrapiFooterHelpPages {
+            edges {
+              node {
+                Title
+                slug
+              }
+            }
+          }
+          allStrapiMenuOtherPages {
+            edges {
+              node {
+                PageTitle
+                Title
+                slug
+              }
+            }
+          }
+          allStrapiProduct {
+            edges {
+              node {
+                ProductName
+                slug
+                Categories {
+                  Title
                   slug
-                  categories {
-                    slug
-                  }
                 }
               }
             }
           }
+        }
+        
         `
       ).then(result => {
         if (result.errors) {
           console.log(result.errors)
           reject(result.errors)
         }
-        const posts = result.data.allContentfulBlog.edges
-        const companyPages = result.data.allContentfulCompanyPage.nodes
-        const helpPages = result.data.allContentfulHelpPage.nodes
-        const otherPages = result.data.allContentfulOtherPages.edges
-        const categoryPages = result.data.allContentfulCategory.edges
-        const productPages = result.data.allContentfulProduct.edges
+        console.info('resultssssss', result)
+        // const posts = result.data.allStrapi.edges
+        const companyPages = result.data.allStrapiFooterCompanyPages.edges
+        const helpPages = result.data.allStrapiFooterHelpPages.edges
+        const otherPages = result.data.allStrapiMenuOtherPages.edges
+        const categoryPages = result.data.allStrapiCategory.edges
+        const productPages = result.data.allStrapiProduct.edges
 
-        // const pages = result.data.allContentNavMenu.nodes.otherTitles
-        posts.forEach(post => {
-          createPage({
-            path: `/blog/${post.node.slug}/`,
-            component: blogPost,
-            context: {
-              slug: post.node.slug,
-            },
-          })
-        })
+        // posts.forEach(post => {
+        //   createPage({
+        //     path: `/blog/${post.node.slug}/`,
+        //     component: blogPost,
+        //     context: {
+        //       slug: post.node.slug,
+        //     },
+        //   })
+        // })
 
         categoryPages.forEach(page => {
           createPage({
@@ -118,12 +123,12 @@ exports.createPages = ({ graphql, actions }) => {
             },
           })
 
-          productPages.forEach(productP => {
+          productPages.forEach(page => {
             createPage({
-              path: `/${productP.node.categories[0].slug}/${productP.node.slug}`,
+              path: `/${page.node.Categories[0].slug}/${page.node.slug}`,
               component: productPage,
               context: {
-                slug: productP.node.slug,
+                slug: page.node.slug,
               },
             })
           })
@@ -131,20 +136,20 @@ exports.createPages = ({ graphql, actions }) => {
 
         companyPages.forEach(page => {
           createPage({
-            path: `/${page.slug}/`,
+            path: `/${page.node.slug}/`,
             component: footerPage,
             context: {
-              slug: page.slug,
+              slug: page.node.slug,
             },
           })
         })
 
         helpPages.forEach(page => {
           createPage({
-            path: `/${page.slug}/`,
+            path: `/${page.node.slug}/`,
             component: footerPage,
             context: {
-              slug: page.slug,
+              slug: page.node.slug,
             },
           })
         })

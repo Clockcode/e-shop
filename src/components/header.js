@@ -4,9 +4,6 @@ import React from "react"
 
 import headerStyle from "./styles/header.module.scss"
 import Dashboard from "./dashboard"
-import bag from "../images/bag.svg"
-import search from "../images/search.svg"
-import user from "../images/user.svg"
 import Navigation from "../components/navigation"
 import { useSelector, shallowEqual } from "react-redux"
 const Header = ({ siteTitle, categories, otherPages }) => {

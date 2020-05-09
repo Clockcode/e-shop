@@ -6,7 +6,7 @@ import mainpageStyle from "./styles/mainpage.module.scss"
 
 const MainpageIntro = ({
   womenImage,
-  womeImageTitle,
+  womenImageTitle,
   menImage,
   menImageTitle,
 }) => {
@@ -16,13 +16,13 @@ const MainpageIntro = ({
         <img
           src={womenImage}
           className={mainpageStyle.down}
-          alt={womeImageTitle}
+          alt={womenImageTitle}
         />
-        <h2 className={mainpageStyle.heroText}>FEEL THE DERRY</h2>
+        <h2 className={mainpageStyle.heroText}>{womenImageTitle}</h2>
       </a>
       <a className={mainpageStyle.heroImage}>
         <img src={menImage} alt={menImageTitle} />
-        <h2 className={mainpageStyle.heroText}>ETHIC & CHIC</h2>
+        <h2 className={mainpageStyle.heroText}>{menImageTitle}</h2>
       </a>
     </section>
   )

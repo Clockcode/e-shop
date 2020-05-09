@@ -8,7 +8,7 @@ const MailSignup = ({ description }) => {
   return (
     <section className={mainpageStyle.mainsignin}>
       <h3 className={mainpageStyle.maindesc}>Be in the know first</h3>
-      <h4>Receive our editor’s style notes! Be the first to hear about special offers, exclusive news.</h4>
+      <h4>{description}</h4>
       <div className={mainpageStyle.mainForm}>
         <div className={mainpageStyle.formWrapper}>
 
