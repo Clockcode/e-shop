@@ -1,21 +1,5 @@
 require("dotenv").config()
 
-// Contentful Section
-let contentfulConfig
-// Overwrite the Contentful config with environment variables if they exist
-contentfulConfig = {
-  spaceId: process.env.GATSBY_CONTENTFUL_SPACE_ID,
-  accessToken: process.env.GATSBY_CONTENTFUL_ACCESS_TOKEN,
-}
-
-const { spaceId, accessToken } = contentfulConfig
-
-if (!spaceId || !accessToken) {
-  throw new Error(
-    "Contentful spaceId and the delivery token need to be provided."
-  )
-}
-
 module.exports = {
   siteMetadata: {
     author: `@sowasred1`,
@@ -69,7 +53,17 @@ module.exports = {
       options: {
         apiURL: `http://localhost:1337`,
         queryLimit: 1000, // Default to 100
-        contentTypes: [`user`, 'product', 'category', 'footer-company-pages', 'footer-help-pages', 'menu-other-pages', 'footer-company-pages', 'brand', 'blog'],
+        contentTypes: [
+          `user`,
+          "product",
+          "category",
+          "footer-company-pages",
+          "footer-help-pages",
+          "menu-other-pages",
+          "footer-company-pages",
+          "brand",
+          "blog",
+        ],
         // If using single types place them in this array.
         singleTypes: [`home-page`],
         // // Possibility to login with a strapi user, when content types are not publically available (optional).
@@ -109,10 +103,6 @@ module.exports = {
         // [optional] - name of key on `window` where serialized state will be stored, default:
         windowKey: "__PRELOADED_STATE__",
       },
-    },
-    {
-      resolve: "gatsby-source-contentful",
-      options: contentfulConfig,
     },
   ],
 }

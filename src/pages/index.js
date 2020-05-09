@@ -12,141 +12,28 @@ import FeaturedProduct from "../components/featuredproduct"
 import Header from "../components/header"
 import headerStyle from "../components/styles/header.module.scss"
 
-// export const pageQuery = graphql`
-//   query HomePageQuery {
-//     allContentfulMainPage {
-//       nodes {
-//         seo {
-//           canonical
-//           metakeywords
-//           title
-//           description
-//         }
-//         mainTitle
-//         description {
-//           content {
-//             content {
-//               value
-//             }
-//           }
-//         }
-//         longDescription {
-//           longDescription
-//         }
-//         product {
-//           price
-//           sku
-//           slug
-//           quantity
-//           image {
-//             fluid {
-//               src
-//             }
-//           }
-//           brand {
-//             companyName {
-//               companyName
-//             }
-//           }
-//           discountedPrice
-//           productName {
-//             productName
-//           }
-//           productDescription {
-//             productDescription
-//           }
-//         }
-//         firstRow {
-//           fluid {
-//             src
-//           }
-//           title
-//         }
-//         secondRow {
-//           fluid {
-//             src
-//           }
-//           title
-//         }
-//       }
-//     }
-//     allContentfulNavMenu {
-//       edges {
-//         node {
-//           categories {
-//             ... on ContentfulCategory {
-//               title {
-//                 title
-//               }
-//               slug
-//               icon {
-//                 fluid {
-//                   src
-//                 }
-//               }
-//               categoryDescription {
-//                 categoryDescription
-//               }
-//             }
-//           }
-//           otherPages {
-//             title
-//             slug
-//           }
-//         }
-//       }
-//     }
-//   }
-// `
 export const pageQuery = graphql`
   query HomePageQuery {
     allStrapiHomePage {
       edges {
         node {
           HomePageTitle
-          SiteTitle
           Description
-          Seo {
-            SiteTitle
-            Description
-            Canonical
-            Keywords
-          }
-          product {
-            id
-            ProductName
-            slug
-            Brand
-            Category
-            Description
-            Variations {
-              Price
-              DiscountedPrice
-              Color
-              Quantity
-              SKU
-              Size
-              id
-              createdAt
-              ProductImages {
-                url
+          Banner {
+            Image {
+              childImageSharp {
+                fluid {
+                  src
+                }
               }
             }
+            Caption
           }
-          BelowImages {
-            url
-          }
-          Footer {
-            footer_company_pages {
-              PageTitle
-              slug
-              PageContent
-            }
-            footer_help_pages {
-              PageTitle
-              slug
-              PageContent
-            }
+          Seo {
+            Canonical
+            Description
+            Keywords
+            SiteTitle
           }
           NavigationMenu {
             categories {
@@ -155,20 +42,22 @@ export const pageQuery = graphql`
               slug
             }
             menu_other_pages {
-              PageTitle
+              Title
               slug
+              PageContent
             }
           }
-          Banner {
-            BannerImage {
-              Caption
-              Image{
-                childImageSharp {
-                  fluid {
-                    src
-                  }
-                }
-              }
+          Footer {
+            FoooterText
+            footer_company_pages {
+              Title
+              PageContent
+              slug
+            }
+            footer_help_pages {
+              PageContent
+              Title
+              slug
             }
           }
         }
@@ -181,13 +70,13 @@ const IndexPage = ({ data }) => {
   // let imageUrl = `https:${data.allContentfulMainPage.nodes[0].mainImage.fluid.src}`
   console.info("ozan", data)
 
-  let womenImage = `${data.allStrapiHomePage.edges[0].node.Banner.BannerImage[0].Image.url}`
+  let womenImage = `${data.allStrapiHomePage.edges[0].node.Banner[0].Image.childImageSharp.fluid.src}`
 
-  let menImage = `${data.allStrapiHomePage.edges[0].node.Banner.BannerImage[1].Image.url}`
+  let menImage = `${data.allStrapiHomePage.edges[0].node.Banner[1].Image.childImageSharp.fluid.src}`
   // let bannerImage = `${data.allStrapiHomePage.edges[0].node.firstRow[2].fluid.src}`
 
-  let firstImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[0].url}`
-  let secondImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[1].url}`
+  // let firstImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[0].url}`
+  // let secondImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[1].url}`
   let description = data.allStrapiHomePage.edges[0].node.Description
 
   // let longDescription =
@@ -196,8 +85,10 @@ const IndexPage = ({ data }) => {
   let featuredProducts = data.allStrapiHomePage.edges[0].node.product
   let seoTemp = data.allStrapiHomePage.edges[0].node.Seo
   let navTemp = data.allStrapiHomePage.edges[0].node
-  let companyPages = data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
-  let helpPages = data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
+  let companyPages =
+    data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
+  let helpPages =
+    data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
   return (
     <Layout>
       <SEO
@@ -215,28 +106,26 @@ const IndexPage = ({ data }) => {
       />
       <MainpageIntro
         womenImage={womenImage}
-        womenImageTitle={data.allStrapiHomePage.edges[0].node.Banner.BannerImage[0].Caption}
+        womenImageTitle={data.allStrapiHomePage.edges[0].node.Banner.Caption}
         menImage={menImage}
-        menImageTitle={data.allStrapiHomePage.edges[0].node.Banner.BannerImage[1].Caption}
+        menImageTitle={data.allStrapiHomePage.edges[0].node.Banner.Caption}
       />
       <FeaturedProduct featuredProducts={featuredProducts} />
-      <BelowSection
-        firstImage={firstImage}
-        secondImage={secondImage}
+      {/* <BelowSection
+      // firstImage={firstImage}
+      // secondImage={secondImage}
       // firstImageTitle={data.allContentfulMainPage.nodes[0].secondRow[0].title}
       // secondImageTitle={
       //   data.allContentfulMainPage.nodes[0].secondRow[1].title
       // }
       // longDescription={longDescription}
-      />
+      /> */}
 
       <MailSignup description={description} />
       {/* <h1>{data.allContentfulMainPage.nodes[0].mainTitle}</h1> */}
       {/* <img src={imageUrl} alt="Girl in a Leather Jacket" /> */}
 
-      <Footer helpPages={helpPages}
-        companyPages={companyPages}
-      />
+      <Footer helpPages={helpPages} companyPages={companyPages} />
     </Layout>
   )
 }

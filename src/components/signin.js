@@ -98,6 +98,29 @@ const Signin = () => {
           </label>
           <button type="submit">Login</button>
         </form>
+        <br />
+        <h2>Not Member yet?</h2>
+        <p>Register now.</p>
+        <form
+          className={signinStyle.formself}
+          method="POST"
+          data-netlify="true"
+          action="./"
+        >
+          <label>
+            Email
+            <input type="email" name="email" id="email" />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" id="password" />
+          </label>
+          <label>
+            Confirm Password
+            <input type="password" name="password" id="password" />
+          </label>
+          <button type="submit">Login</button>
+        </form>
       </Modal>
     </div>
   )

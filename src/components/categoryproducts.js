@@ -234,7 +234,7 @@ const CategoryProducts = ({ catSlug }) => {
                     item.value / minPriceInterval === 1
                       ? parseFloat(0)
                       : parseFloat(item.value / minPriceInterval - 1) *
-                      minPriceInterval,
+                        minPriceInterval,
                   lessThan: parseFloat(item.value),
                   sortType: "price",
                   fit: fullFiltersBoolean ? tempString : fullFitFilters,
@@ -277,9 +277,9 @@ const CategoryProducts = ({ catSlug }) => {
                       item.value / minPriceInterval === 1
                         ? parseFloat(0)
                         : parseFloat(
-                          (item.value / minPriceInterval - 1) *
-                          minPriceInterval
-                        ),
+                            (item.value / minPriceInterval - 1) *
+                              minPriceInterval
+                          ),
                     lessThan: parseFloat(item.value),
                     sortType: "price",
                     fit: fullFiltersBoolean ? tempString : fullFitFilters,
@@ -319,9 +319,9 @@ const CategoryProducts = ({ catSlug }) => {
                       item.value / minPriceInterval === 1
                         ? parseFloat(0)
                         : parseFloat(
-                          (item.value / minPriceInterval - 1) *
-                          minPriceInterval
-                        ),
+                            (item.value / minPriceInterval - 1) *
+                              minPriceInterval
+                          ),
                     lessThan: parseFloat(item.value),
                     sortType: "price",
                     fit: fullFiltersBoolean ? tempString : fullFitFilters,
@@ -361,9 +361,9 @@ const CategoryProducts = ({ catSlug }) => {
                       item.value / minPriceInterval === 1
                         ? parseFloat(0)
                         : parseFloat(
-                          (item.value / minPriceInterval - 1) *
-                          minPriceInterval
-                        ),
+                            (item.value / minPriceInterval - 1) *
+                              minPriceInterval
+                          ),
                     lessThan: parseFloat(item.value),
                     sortType: "price",
                     fit: fullFiltersBoolean ? tempString : fullFitFilters,
@@ -474,25 +474,29 @@ const CategoryProducts = ({ catSlug }) => {
       <section className={catProductsStyle.catWraper}>
         {categoryProductsState && categoryProductsState.length > 0 ? (
           categoryProductsState.map(item => {
+            console.info(item, "prod check")
             return (
               <article>
                 <Link to={`${catSlug}/${item.slug}`}>
                   <span id={catProductsStyle.best}>BEST</span>
                   <img
-                    src={item.image[0].fluid.src}
-                    alt={item.productName.productName}
+                    src={
+                      item.Variations[0].ProductImages[0].formats.medium
+                        .childImageSharp.fluid.src
+                    }
+                    alt={item.Variations[0].ProductImages[0].caption}
                   />
                 </Link>
                 <div className={catProductsStyle.productInfo}>
-                  <h4>{item.productName.productName}</h4>
-                  <p>CA${item.price.toFixed(2)}</p>
+                  <h4>{item.ProductName}</h4>
+                  <p>CA${item.Variations[0].Price.toFixed(2)}</p>
                 </div>
               </article>
             )
           })
         ) : (
-            <h1>Unfortunetely, there is no products in this category.</h1>
-          )}
+          <h1>Unfortunetely, there is no products in this category.</h1>
+        )}
       </section>
       {categoryProductsState && (
         <Pagination

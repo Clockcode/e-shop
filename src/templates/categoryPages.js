@@ -13,119 +13,63 @@ import Header from "../components/header"
 import headerStyle from "../components/styles/header.module.scss"
 import { fetchCategories } from "../state/actions/categoryActions"
 
-// export const query = graphql`
-//   query($slug: String!) {
-//     contentfulCategory(slug: { eq: $slug }) {
-//       title {
-//         title
-//       }
-//       categoryDescription {
-//         childMarkdownRemark {
-//           html
-//         }
-//       }
-//       headerImage {
-//         fluid {
-//           src
-//         }
-//       }
-//       icon {
-//         fluid {
-//           src
-//         }
-//       }
-//       slug
-//       product {
-//         id
-//         color
-//         price
-//         size
-//         quantity
-//         sku
-//         slug
-//         productName {
-//           productName
-//         }
-//         image {
-//           fluid {
-//             src
-//           }
-//         }
-//         filters {
-//           fit
-//           gender
-//           seasonType
-//           style
-//         }
-//       }
-//     }
-//     allContentfulNavMenu {
-//       edges {
-//         node {
-//           categories {
-//             ... on ContentfulCategory {
-//               title {
-//                 title
-//               }
-//               slug
-//               icon {
-//                 fluid {
-//                   src
-//                 }
-//               }
-//               categoryDescription {
-//                 categoryDescription
-//               }
-//             }
-//           }
-//           otherPages {
-//             title
-//             slug
-//           }
-//         }
-//       }
-//     }
-//   }
-// `
-export const pageQuery = graphql`
-  query ProductsQuery {
-  allStrapiProduct {
-    totalCount
-    edges {
-      node {
+export const query = graphql`
+  query($slug: String!) {
+    strapiCategory(slug: { eq: $slug }) {
+      Title
+      Description
+      slug
+      products {
+        id
         ProductName
+        Description
         slug
+        Brand
         Variations {
-          Color
-          DiscountedPrice
-          Price
-          Quantity
+          SKU
           Size
+          Color
+          Price
+          DiscountedPrice
+          Quantity
+          ProductImages {
+            caption
+            formats {
+              medium {
+                childImageSharp {
+                  fluid {
+                    src
+                  }
+                }
+              }
+            }
+          }
         }
-        Brand {
-          BrandName
+        ProductFilterSettings {
+          Fit
+          Gender
+          SeasonType
+          Style
+        }
+      }
+    }
+    strapiHomePage {
+      NavigationMenu {
+        categories {
+          Title
+          Description
+          slug
+        }
+        menu_other_pages {
+          Title
+          PageContent
+          slug
         }
       }
     }
   }
-  allStrapiHomePage {
-    edges {
-      node {
-        NavigationMenu {
-          menu_other_pages {
-            Title
-            PageTitle
-            slug
-          }
-          categories {
-            Title
-            slug
-          }
-        }
-      }
-    }
-  }
-}`
+`
+
 const CategoryPages = data => {
   const checkedPriceFilters = useSelector(
     state => state.filterReducer.checkedPriceFilters,
@@ -146,8 +90,8 @@ const CategoryPages = data => {
 
   const dispatch = useDispatch()
   const fetchCategoriesLocal = () => {
-    let navCategory = data.data.contentfulCategory.title.title
-    let categoryProds = data.data.allStrapiHomePage.edges[0].node.product
+    let navCategory = data.data.strapiCategory.Title
+    let categoryProds = data.data.strapiCategory.products
     let loading = false
     let currentPage = 1
 
@@ -184,41 +128,38 @@ const CategoryPages = data => {
           .html,
     }
   }
-  const isMobile = window.innerWidth <= 510;
+  const isMobile = window.innerWidth <= 510
   console.info("cagdas", data)
 
-  let navTemp = data.data.allStrapiHomePage.edges[0].node
-  let products = data.data.allStrapiProducts.edges
+  let navTemp = data.data.strapiHomePage.NavigationMenu
 
   return (
     <Layout>
       <Header
-        categories={navTemp.NavigationMenu.categories}
-        otherPages={navTemp.NavigationMenu.menu_other_pages}
+        categories={navTemp.categories}
+        otherPages={navTemp.menu_other_pages}
         className={headerStyle.navigation}
-        siteTitle={navTemp.HomePageTitle}
+        siteTitle={data.data.strapiCategory.Title}
       />
       <CatBreadCrumb
-        title={data.data.contentfulCategory.title.title}
-        slug={data.data.contentfulCategory.slug}
+        title={data.data.strapiCategory.Title}
+        slug={data.data.strapiCategory.slug}
       />
-      <h1 className="categoryPageTitle">
-        {data.data.contentfulCategory.title.title}
-      </h1>
+      <h1 className="categoryPageTitle">{data.data.strapiCategory.Title}</h1>
       {/* <p dangerouslySetInnerHTML={createMarkup()} /> */}
-      {
-        isMobile ?
-          <div style={{ display: "flex" }}>
-            <MobileFilter catSlug={data.data.contentfulCategory.slug} />
-            <MobileSort catSlug={data.data.contentfulCategory.slug} />
-          </div>
-          : <div style={{ float: "left", display: "inline-block", width: "18vw" }}>
-            <MobileFilter catSlug={data.data.contentfulCategory.slug} />
-            <MobileSort catSlug={data.data.contentfulCategory.slug} />
-          </div>
-      }
+      {isMobile ? (
+        <div style={{ display: "flex" }}>
+          <MobileFilter catSlug={data.data.strapiCategory.slug} />
+          <MobileSort catSlug={data.data.strapiCategory.slug} />
+        </div>
+      ) : (
+        <div style={{ float: "left", display: "inline-block", width: "18vw" }}>
+          <MobileFilter catSlug={data.data.strapiCategory.slug} />
+          <MobileSort catSlug={data.data.strapiCategory.slug} />
+        </div>
+      )}
 
-      <CategoryProducts catSlug={data.data.contentfulCategory.slug} />
+      <CategoryProducts catSlug={data.data.strapiCategory.slug} />
     </Layout>
   )
 }
