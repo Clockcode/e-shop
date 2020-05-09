@@ -69,12 +69,12 @@ const Footer = () => {
           <h3>Company</h3>
           {companyTitles && companyTitles.length > 0
             ? companyTitles.map(item => {
-                return (
-                  <h4>
-                    <Link to={item.slug}>{item.title}</Link>
-                  </h4>
-                )
-              })
+              return (
+                <h4>
+                  <Link to={item.slug}>{item.title}</Link>
+                </h4>
+              )
+            })
             : null}
         </div>
         <div className={(footerStyle.middleDiv, footerStyle.footItem)}>
@@ -99,7 +99,7 @@ const Footer = () => {
         </div>
         <div className={footerStyle.footItem}>
           <h3>Help</h3>
-          {helpTitles && helpTitles.length > 0
+          {/* {helpTitles && helpTitles.length > 0
             ? helpTitles.map(item => {
                 return (
                   <h4>
@@ -107,7 +107,7 @@ const Footer = () => {
                   </h4>
                 )
               })
-            : null}
+            : null} */}
         </div>
       </div>
       <div className={footerStyle.footerBottom}></div>

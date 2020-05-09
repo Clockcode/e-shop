@@ -1,9 +1,11 @@
 $color: black;
 html {
   font-size: 62.5%; //10px
+  overflow-x: hidden;
 }
 body {
   font-size: 1.6rem;
+  overflow-x: hidden;
 }
 * {
   margin: 0;

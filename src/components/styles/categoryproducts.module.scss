@@ -1,18 +1,20 @@
 .catWraper {
-  width: 65vw;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 1rem;
   float: left;
+  width: 75vw;
   margin-bottom: 5rem;
   font-size: 1rem;
-
+  margin: 1rem 0 1rem 2rem;
+  align-items: center;
+  justify-items: center;
   article {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    margin: .5rem 0;
-    padding: .5rem 0;
+    margin: .5rem 1rem;
+    padding: .5rem;
 
     a {
       position: relative;
@@ -71,5 +73,19 @@
 @media all and (max-width: 510px) {
   .catWraper{
     width:100vw;
+    margin: 0;
+    article {
+      a {
+        height: 35vh;
+        #best {
+          font-size: .7rem;
+        }
+      }
+    }
+  }
+}
+@media all and (max-width: 650px) and (min-width: 425px) {
+  .catWraper{
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
