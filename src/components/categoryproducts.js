@@ -495,13 +495,13 @@ const CategoryProducts = ({ catSlug }) => {
                 <Link to={`${catSlug}/${item.slug}`}>
                   <span id={catProductsStyle.best}>BEST</span>
                   <img
-                    src={item.Variations[0].ProductImages[0].url}
-                    alt={item.Variations[0].ProductImages[0].caption}
+                    src={item.image.childImageSharp.fluid.src}
+                    // alt={item.Variations[0].ProductImages[0].caption}
                   />
                 </Link>
                 <div className={catProductsStyle.productInfo}>
                   <h4>{item.ProductName}</h4>
-                  <p>CA${item.Variations[0].Price.toFixed(2)}</p>
+                  <p>CA${item.Price.toFixed(2)}</p>
                 </div>
               </article>
             )

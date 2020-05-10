@@ -60,6 +60,24 @@ export const pageQuery = graphql`
               slug
             }
           }
+          product {
+            Category
+            Price
+            ProductName
+            Variations {
+              Color
+              Size
+              Quantity
+              SKU
+            }
+            image {
+              childImageSharp {
+                fluid {
+                  src
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -111,7 +129,7 @@ const IndexPage = ({ data }) => {
         menImageTitle={data.allStrapiHomePage.edges[0].node.Banner.Caption}
       />
       <FeaturedProduct featuredProducts={featuredProducts} />
-      {/* <BelowSection
+      <BelowSection
       // firstImage={firstImage}
       // secondImage={secondImage}
       // firstImageTitle={data.allContentfulMainPage.nodes[0].secondRow[0].title}
@@ -119,7 +137,7 @@ const IndexPage = ({ data }) => {
       //   data.allContentfulMainPage.nodes[0].secondRow[1].title
       // }
       // longDescription={longDescription}
-      /> */}
+      />
 
       <MailSignup description={description} />
       {/* <h1>{data.allContentfulMainPage.nodes[0].mainTitle}</h1> */}

@@ -36,6 +36,13 @@ export const query = graphql`
             url
           }
         }
+        image {
+          childImageSharp {
+            fluid {
+              src
+            }
+          }
+        }
         ProductFilterSettings {
           Fit
           Gender
