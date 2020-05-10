@@ -21,62 +21,77 @@ const SORT_FILTER_QUERY = gql`
     $valueG: [SortOrderEnum]
     $greaterThan: Float
     $lessThan: Float
-    $sortType: [ContentfulProductFieldsEnum]
-    $fit: ContentfulFiltersFilterInput
+    $sortType: [StrapiProductFieldsEnum]
+    $fit: StrapiProductFilterSettingsInput
   ) {
     allContentfulProduct(
       filter: {
-        price: { gt: $greaterThan, lte: $lessThan }
-        categories: { elemMatch: { slug: { eq: $catSlugG } } }
-        filters: $fit
+        Price: { gt: $greaterThan, lte: $lessThan }
+        Categories: { elemMatch: { slug: { eq: $catSlugG } } }
+        ProductFilterSettings: $fit
       }
       sort: { fields: $sortType, order: $valueG }
     ) {
       nodes {
         id
-        price
+        ProductName
+        Description
         slug
-        discountedPrice
-        image {
-          fluid {
-            src
+        Price
+        DiscountedPrice
+        Variations {
+          SKU
+          Size
+          Color
+          Quantity
+          ProductImages {
+            caption
+            url
           }
-          title
         }
-        productName {
-          productName
-        }
-        filters {
-          seasonType
+        ProductFilterSettings {
+          Fit
+          Gender
+          SeasonType
+          Style
         }
       }
     }
   }
 `
 const PRODUCT_QUERY = gql`
-  query sortProducts($catSlugG: String, $fit: ContentfulFiltersFilterInput) {
+  query sortProducts(
+    $catSlugG: String
+    $fit: StrapiProductFilterSettingsInput
+  ) {
     allContentfulProduct(
       filter: {
         categories: { elemMatch: { slug: { eq: $catSlugG } } }
-        filters: $fit
+        ProductFilterSettings: $fit
       }
     ) {
       nodes {
         id
-        price
+        ProductName
+        Description
         slug
-        discountedPrice
-        image {
-          fluid {
-            src
+        Price
+        DiscountedPrice
+        Variations {
+          SKU
+          Size
+          Color
+          Quantity
+          ProductImages {
+            caption
+            url
           }
-          title
         }
-        productName {
-          productName
-        }
-        filters {
-          seasonType
+        ProductFilterSettings {
+          Fit
+          Gender
+          SeasonType
+          Style
         }
       }
     }
@@ -153,9 +168,9 @@ const CategoryProducts = ({ catSlug }) => {
       checkedSeasonFiltersState.length > 0
 
     const fullFitFilters = {
-      fit: { in: ["Slim", "Oversized", "Cropped", "Regular"] },
-      style: { in: ["Jacket", "Biker", "Blazer", "Coat", "Mac"] },
-      seasonType: {
+      Fit: { in: ["Slim", "Oversized", "Cropped", "Regular"] },
+      Style: { in: ["Jacket", "Biker", "Blazer", "Coat", "Mac"] },
+      SeasonType: {
         in: ["New Season", "Regular", "Best Seller", "Discounted"],
       },
     }
@@ -165,13 +180,13 @@ const CategoryProducts = ({ catSlug }) => {
     let temp3 = {}
 
     if (letfitArray.length > 0) {
-      temp1 = { fit: { in: letfitArray } }
+      temp1 = { Fit: { in: letfitArray } }
     }
     if (styledArray.length > 0) {
-      temp2 = { style: { in: styledArray } }
+      temp2 = { Style: { in: styledArray } }
     }
     if (seasonArray.length > 0) {
-      temp3 = { seasonType: { in: seasonArray } }
+      temp3 = { SeasonType: { in: seasonArray } }
     }
 
     if (

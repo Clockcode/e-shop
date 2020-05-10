@@ -24,13 +24,12 @@ export const query = graphql`
         ProductName
         Description
         slug
-        Brand
+        Price
+        DiscountedPrice
         Variations {
           SKU
           Size
           Color
-          Price
-          DiscountedPrice
           Quantity
           ProductImages {
             caption
