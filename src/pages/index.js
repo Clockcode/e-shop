@@ -20,7 +20,7 @@ export const pageQuery = graphql`
           HomePageTitle
           Description
           Banner {
-            Image {
+            Picture {
               childImageSharp {
                 fluid {
                   src
@@ -47,6 +47,17 @@ export const pageQuery = graphql`
               PageContent
             }
           }
+          BelowImages {
+            formats {
+              large {
+                childImageSharp {
+                  fluid {
+                    src
+                  }
+                }
+              }
+            }
+          }
           Footer {
             FoooterText
             footer_company_pages {
@@ -69,11 +80,15 @@ export const pageQuery = graphql`
               Size
               Quantity
               SKU
-            }
-            image {
-              childImageSharp {
-                fluid {
-                  src
+              ProductImages {
+                formats {
+                  medium {
+                    childImageSharp {
+                      fluid {
+                        src
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -88,13 +103,13 @@ const IndexPage = ({ data }) => {
   // let imageUrl = `https:${data.allContentfulMainPage.nodes[0].mainImage.fluid.src}`
   console.info("ozan", data)
 
-  let womenImage = `${data.allStrapiHomePage.edges[0].node.Banner[0].Image.childImageSharp.fluid.src}`
+  let womenImage = `${data.allStrapiHomePage.edges[0].node.Banner[0].Picture.childImageSharp.fluid.src}`
 
-  let menImage = `${data.allStrapiHomePage.edges[0].node.Banner[1].Image.childImageSharp.fluid.src}`
+  let menImage = `${data.allStrapiHomePage.edges[0].node.Banner[1].Picture.childImageSharp.fluid.src}`
   // let bannerImage = `${data.allStrapiHomePage.edges[0].node.firstRow[2].fluid.src}`
 
-  // let firstImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[0].url}`
-  // let secondImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[1].url}`
+  let firstImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[0].formats.large.childImageSharp.fluid.src}`
+  let secondImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[1].formats.large.childImageSharp.fluid.src}`
   let description = data.allStrapiHomePage.edges[0].node.Description
 
   // let longDescription =
@@ -130,13 +145,13 @@ const IndexPage = ({ data }) => {
       />
       <FeaturedProduct featuredProducts={featuredProducts} />
       <BelowSection
-      // firstImage={firstImage}
-      // secondImage={secondImage}
-      // firstImageTitle={data.allContentfulMainPage.nodes[0].secondRow[0].title}
-      // secondImageTitle={
-      //   data.allContentfulMainPage.nodes[0].secondRow[1].title
-      // }
-      // longDescription={longDescription}
+        firstImage={firstImage}
+        secondImage={secondImage}
+        // firstImageTitle={data.allContentfulMainPage.nodes[0].secondRow[0].title}
+        // secondImageTitle={
+        //   data.allContentfulMainPage.nodes[0].secondRow[1].title
+        // }
+        // longDescription={longDescription}
       />
 
       <MailSignup description={description} />

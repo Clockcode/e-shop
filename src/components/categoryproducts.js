@@ -46,7 +46,15 @@ const SORT_FILTER_QUERY = gql`
           Quantity
           ProductImages {
             caption
-            url
+            formats {
+              medium {
+                childImageSharp {
+                  fluid {
+                    src
+                  }
+                }
+              }
+            }
           }
         }
         ProductFilterSettings {
@@ -84,7 +92,15 @@ const PRODUCT_QUERY = gql`
           Quantity
           ProductImages {
             caption
-            url
+            formats {
+              medium {
+                childImageSharp {
+                  fluid {
+                    src
+                  }
+                }
+              }
+            }
           }
         }
         ProductFilterSettings {
@@ -489,15 +505,24 @@ const CategoryProducts = ({ catSlug }) => {
       <section className={catProductsStyle.catWraper}>
         {categoryProductsState && categoryProductsState.length > 0 ? (
           categoryProductsState.map(item => {
-            console.info(item, "prod check")
+            console.info(
+              item.Variations[0].ProductImages[0].formats.medium,
+              "prod check"
+            )
             return (
               <article>
                 <Link to={`${catSlug}/${item.slug}`}>
                   <span id={catProductsStyle.best}>BEST</span>
-                  <img
-                    src={item.image.childImageSharp.fluid.src}
-                    // alt={item.Variations[0].ProductImages[0].caption}
-                  />
+                  {item.Variations[0].ProductImages[0].formats.medium !=
+                  null ? (
+                    <img
+                      src={
+                        item.Variations[0].ProductImages[0].formats.medium
+                          .childImageSharp.fluid.src
+                      }
+                      alt={item.Variations[0].ProductImages[0].caption}
+                    />
+                  ) : null}
                 </Link>
                 <div className={catProductsStyle.productInfo}>
                   <h4>{item.ProductName}</h4>

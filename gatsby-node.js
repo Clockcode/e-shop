@@ -34,69 +34,68 @@ exports.createPages = ({ graphql, actions }) => {
     resolve(
       graphql(
         `
-        {
-          allStrapiBrand {
-            edges {
-              node {
-                BrandName
-                slug
+          {
+            allStrapiBrand {
+              edges {
+                node {
+                  BrandName
+                  slug
+                }
               }
             }
-          }
-          allStrapiCategory {
-            edges {
-              node {
-                Title
-                slug
-              }
-            }
-          }
-          allStrapiFooterCompanyPages {
-            edges {
-              node {
-                PageTitle
-                slug
-              }
-            }
-          }
-          allStrapiFooterHelpPages {
-            edges {
-              node {
-                Title
-                slug
-              }
-            }
-          }
-          allStrapiMenuOtherPages {
-            edges {
-              node {
-                PageTitle
-                Title
-                slug
-              }
-            }
-          }
-          allStrapiProduct {
-            edges {
-              node {
-                ProductName
-                slug
-                Categories {
+            allStrapiCategory {
+              edges {
+                node {
                   Title
                   slug
                 }
               }
             }
+            allStrapiFooterCompanyPages {
+              edges {
+                node {
+                  PageTitle
+                  slug
+                }
+              }
+            }
+            allStrapiFooterHelpPages {
+              edges {
+                node {
+                  Title
+                  slug
+                }
+              }
+            }
+            allStrapiMenuOtherPages {
+              edges {
+                node {
+                  PageTitle
+                  Title
+                  slug
+                }
+              }
+            }
+            allStrapiProduct {
+              edges {
+                node {
+                  ProductName
+                  slug
+                  Categories {
+                    Title
+                    slug
+                  }
+                }
+              }
+            }
           }
-        }
-        
         `
       ).then(result => {
         if (result.errors) {
           console.log(result.errors)
           reject(result.errors)
         }
-        console.info('resultssssss', result)
+        console.info("resultssssss", result)
         // const posts = result.data.allStrapi.edges
         const companyPages = result.data.allStrapiFooterCompanyPages.edges
         const helpPages = result.data.allStrapiFooterHelpPages.edges

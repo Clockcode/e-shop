@@ -33,13 +33,14 @@ export const query = graphql`
           Quantity
           ProductImages {
             caption
-            url
-          }
-        }
-        image {
-          childImageSharp {
-            fluid {
-              src
+            formats {
+              medium {
+                childImageSharp {
+                  fluid {
+                    src
+                  }
+                }
+              }
             }
           }
         }
@@ -119,13 +120,6 @@ const CategoryPages = data => {
     checkedSeasonFiltersState,
   ])
 
-  const createMarkup = () => {
-    return {
-      __html:
-        data.data.contentfulCategory.categoryDescription.childMarkdownRemark
-          .html,
-    }
-  }
   const isMobile = window.innerWidth <= 510
   console.info("cagdas", data)
 
