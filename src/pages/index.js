@@ -81,6 +81,7 @@ export const pageQuery = graphql`
               Quantity
               SKU
               ProductImages {
+                caption
                 formats {
                   medium {
                     childImageSharp {

@@ -92,15 +92,7 @@ const PRODUCT_QUERY = gql`
           Quantity
           ProductImages {
             caption
-            formats {
-              medium {
-                childImageSharp {
-                  fluid {
-                    src
-                  }
-                }
-              }
-            }
+            url
           }
         }
         ProductFilterSettings {
