@@ -102,8 +102,9 @@ const IndexPage = ({ data }) => {
   console.info("ozan", data)
 
   let womenImage = `${data.allStrapiHomePage.edges[0].node.Banner[0].Picture.childImageSharp.fluid.src}`
-
+  let womenCaption = `${data.allStrapiHomePage.edges[0].node.Banner[0].Caption}`
   let menImage = `${data.allStrapiHomePage.edges[0].node.Banner[1].Picture.childImageSharp.fluid.src}`
+  let menCaption = `${data.allStrapiHomePage.edges[0].node.Banner[1].Caption}`
   // let bannerImage = `${data.allStrapiHomePage.edges[0].node.firstRow[2].fluid.src}`
 
   let firstImage = `${data.allStrapiHomePage.edges[0].node.SectionBelow[0].SectionImage.childImageSharp.fluid.src}`
@@ -137,9 +138,9 @@ const IndexPage = ({ data }) => {
       />
       <MainpageIntro
         womenImage={womenImage}
-        womenImageTitle={data.allStrapiHomePage.edges[0].node.Banner.Caption}
+        womenImageTitle={womenCaption}
         menImage={menImage}
-        menImageTitle={data.allStrapiHomePage.edges[0].node.Banner.Caption}
+        menImageTitle={menCaption}
       />
       <FeaturedProduct featuredProducts={featuredProducts} />
       <BelowSection
