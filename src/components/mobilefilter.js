@@ -18,6 +18,61 @@ import OtherFilters from "./otherfilters"
 
 import filterStyle from "./styles/filter.module.scss"
 
+import Checkbox from "@material-ui/core/Checkbox"
+
+function Checkboxes({ index, interval }) {
+  const [checked, setChecked] = React.useState(true)
+  const dispatch = useDispatch()
+
+  const checkedPriceFiltersState = useSelector(
+    state => state.filterReducer.checkedPriceFilters,
+    shallowEqual
+  )
+
+  const handlePriceFilterClicked = e => {
+    filterProductsPrice(e)
+  }
+
+  const filterProductsPrice = e => {
+    let chekboxValue = e.target.value
+    let tempArray = checkedPriceFiltersState
+    let remove = false
+    if (tempArray.length > 0) {
+      remove = tempArray.some(item => item.value === chekboxValue)
+    }
+    if (remove) {
+      dispatch(setLastRemovedFilter(chekboxValue))
+    }
+
+    dispatch(checkedPriceFilters({ value: chekboxValue }))
+  }
+
+  return (
+    <React.Fragment>
+      <Checkbox
+        onChange={e => {
+          handlePriceFilterClicked(e)
+        }}
+        color="primary"
+        inputProps={{ "aria-label": "secondary checkbox" }}
+        value={(index + 1) * interval}
+      />
+      {/* <Checkbox inputProps={{ "aria-label": "uncontrolled-checkbox" }} /> */}
+      {/* <Checkbox disabled inputProps={{ "aria-label": "disabled checkbox" }} /> */}
+      {/* <Checkbox
+        defaultChecked
+        color="default"
+        inputProps={{ "aria-label": "checkbox with default color" }}
+      /> */}
+      {/* <Checkbox
+        defaultChecked
+        size="small"
+        inputProps={{ "aria-label": "checkbox with small size" }}
+      /> */}
+    </React.Fragment>
+  )
+}
+
 const customStyles = {
   content: {
     // top: "10vh",
@@ -119,16 +174,7 @@ const MobileFilter = ({ catSlug, products }) => {
                         : "not-active"
                     }
                   ></span>
-                  <input
-                    onChange={e => {
-                      handlePriceFilterClicked(e)
-                    }}
-                    index={index}
-                    className={filterStyle.inputself}
-                    type="checkbox"
-                    name="Price Filter"
-                    value={(index + 1) * interval}
-                  />
+                  <Checkboxes index={index} interval={interval} />
                   <label className={filterStyle.labelself} for="Price Filter">
                     {index * interval}$ - ${(index + 1) * interval}
                   </label>
@@ -147,15 +193,7 @@ const MobileFilter = ({ catSlug, products }) => {
                         : "not-active"
                     }
                   ></span>
-                  <input
-                    onChange={e => {
-                      handlePriceFilterClicked(e)
-                    }}
-                    className={filterStyle.inputself}
-                    type="checkbox"
-                    name="Price Filter"
-                    value={(index + 1) * interval}
-                  />
+                  <Checkboxes index={index} interval={interval} />
                   <label className={filterStyle.labelself} for="Price Filter">
                     {index * interval}$ - Above
                   </label>

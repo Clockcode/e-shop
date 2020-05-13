@@ -9,6 +9,90 @@ import {
 } from "../state/actions/filterActions"
 import filterStyle from "./styles/filter.module.scss"
 
+import Checkbox from "@material-ui/core/Checkbox"
+
+function Checkboxes({ value, name }) {
+  const [checked, setChecked] = React.useState(true)
+  const dispatch = useDispatch()
+
+  const checkedFitFiltersState = useSelector(
+    state => state.filterReducer.checkedFitFilters,
+    shallowEqual
+  )
+  const checkedStyledFiltersState = useSelector(
+    state => state.filterReducer.checkedStyledFilters,
+    shallowEqual
+  )
+
+  const checkedSeasonFiltersState = useSelector(
+    state => state.filterReducer.checkedSeasonFilters,
+    shallowEqual
+  )
+  const checkedPriceFiltersState = useSelector(
+    state => state.filterReducer.checkedPriceFilters,
+    shallowEqual
+  )
+  const handleFitFilterClicked = e => {
+    let tempValue = e.target.value
+    dispatch(checkedFitFilters({ value: tempValue }))
+  }
+  const handleStyleFilterClicked = e => {
+    let tempValue = e.target.value
+    dispatch(styledFitFilters({ value: tempValue }))
+  }
+  const handleSeasonFilterClicked = e => {
+    let tempValue = e.target.value
+    dispatch(seasonTypeFilters({ value: tempValue }))
+  }
+
+  return (
+    <React.Fragment>
+      {name === "fit" && (
+        <Checkbox
+          onChange={e => {
+            handleFitFilterClicked(e)
+          }}
+          color="primary"
+          inputProps={{ "aria-label": "secondary checkbox" }}
+          value={value}
+        />
+      )}
+      {name === "season" && (
+        <Checkbox
+          onChange={e => {
+            handleSeasonFilterClicked(e)
+          }}
+          color="primary"
+          inputProps={{ "aria-label": "secondary checkbox" }}
+          value={value}
+        />
+      )}
+      {name === "style" && (
+        <Checkbox
+          onChange={e => {
+            handleStyleFilterClicked(e)
+          }}
+          color="primary"
+          inputProps={{ "aria-label": "secondary checkbox" }}
+          value={value}
+        />
+      )}
+      {/* <Checkbox inputProps={{ "aria-label": "uncontrolled-checkbox" }} /> */}
+      {/* <Checkbox disabled inputProps={{ "aria-label": "disabled checkbox" }} /> */}
+      {/* <Checkbox
+        defaultChecked
+        color="default"
+        inputProps={{ "aria-label": "checkbox with default color" }}
+      /> */}
+      {/* <Checkbox
+        defaultChecked
+        size="small"
+        inputProps={{ "aria-label": "checkbox with small size" }}
+      /> */}
+    </React.Fragment>
+  )
+}
+
 export const OtherFilters = () => {
   const checkedFitFiltersState = useSelector(
     state => state.filterReducer.checkedFitFilters,
@@ -52,16 +136,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleFitFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Fit Filter"
-            value="Slim"
-          />
-          <label className={filterStyle.labelself} for="Fit Filter">
+          <Checkboxes name="fit" value="Slim" />
+          <label className={filterStyle.labelself} for="fit">
             Slim
           </label>
         </div>
@@ -73,16 +149,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleFitFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Fit Filter"
-            value="Oversized"
-          />
-          <label className={filterStyle.labelself} for="Fit Filter">
+          <Checkboxes name="fit" value="Oversized" />
+          <label className={filterStyle.labelself} for="fit">
             Oversized
           </label>
         </div>
@@ -94,16 +162,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleFitFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Fit Filter"
-            value="Cropped"
-          />
-          <label className={filterStyle.labelself} for="Fit Filter">
+          <Checkboxes name="fit" value="Cropped" />
+          <label className={filterStyle.labelself} for="fit">
             Cropped
           </label>
         </div>
@@ -115,16 +175,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleFitFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Fit Filter"
-            value="Regular"
-          />
-          <label className={filterStyle.labelself} for="Fit Filter">
+          <Checkboxes name="fit" value="Regular" />
+          <label className={filterStyle.labelself} for="fit">
             Regular
           </label>
         </div>
@@ -144,16 +196,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleStyleFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Style Filter"
-            value="Jacket"
-          />
-          <label className={filterStyle.labelself} for="Style Filter">
+          <Checkboxes name="style" value="Jacket" />
+          <label className={filterStyle.labelself} for="style">
             Jacket
           </label>
         </div>
@@ -165,16 +209,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleStyleFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Style Filter"
-            value="Biker"
-          />
-          <label className={filterStyle.labelself} for="Style Filter">
+          <Checkboxes name="style" value="Biker" />
+          <label className={filterStyle.labelself} for="style">
             Biker
           </label>
         </div>
@@ -186,16 +222,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleStyleFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Style Filter"
-            value="Blazer"
-          />
-          <label className={filterStyle.labelself} for="Style Filter">
+          <Checkboxes name="style" value="Blazer" />
+          <label className={filterStyle.labelself} for="style">
             Blazer
           </label>
         </div>
@@ -207,16 +235,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleStyleFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Style Filter"
-            value="Coat"
-          />
-          <label className={filterStyle.labelself} for="Style Filter">
+          <Checkboxes name="style" value="Coat" />
+          <label className={filterStyle.labelself} for="style">
             Coat
           </label>
         </div>
@@ -228,16 +248,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleStyleFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Style Filter"
-            value="Mac"
-          />
-          <label className={filterStyle.labelself} for="Style Filter">
+          <Checkboxes name="style" value="Mac" />
+          <label className={filterStyle.labelself} for="style">
             Mac
           </label>
         </div>
@@ -259,16 +271,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleSeasonFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Season Type Filter"
-            value="New Season"
-          />
-          <label className={filterStyle.labelself} for="Season Type Filter">
+          <Checkboxes name="season" value="New Season" />
+          <label className={filterStyle.labelself} for="season">
             New Season
           </label>
         </div>
@@ -280,16 +284,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleSeasonFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Season Type Filter"
-            value="Regular"
-          />
-          <label className={filterStyle.labelself} for="Season Type Filter">
+          <Checkboxes name="season" value="Regular" />
+          <label className={filterStyle.labelself} for="season">
             Regular
           </label>
         </div>
@@ -303,16 +299,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleSeasonFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Season Type Filter"
-            value="Best Seller"
-          />
-          <label className={filterStyle.labelself} for="Season Type Filter">
+          <Checkboxes name="season" value="Best Seller" />
+          <label className={filterStyle.labelself} for="season">
             Best Seller
           </label>
         </div>
@@ -326,16 +314,8 @@ export const OtherFilters = () => {
                 : "not-active"
             }
           ></span>
-          <input
-            onChange={e => {
-              handleSeasonFilterClicked(e)
-            }}
-            className={filterStyle.inputself}
-            type="checkbox"
-            name="Season Type Filter"
-            value="Discounted"
-          />
-          <label className={filterStyle.labelself} for="Season Type Filter">
+          <Checkboxes name="season" value="Discounted" />
+          <label className={filterStyle.labelself} for="season">
             Discounted
           </label>
         </div>
