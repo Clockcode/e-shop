@@ -6,7 +6,6 @@ import gql from "graphql-tag"
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
 
 import {
-  handlePriceFilter,
   checkedPriceFilters,
   uncheckedPriceFilters,
   setLastRemovedFilter,
@@ -48,43 +47,6 @@ const customStyles = {
     // /* margin: 0px,
   },
 }
-
-const FILTER_BY_PRICE = gql`
-  query filterProductsByPrice(
-    $catSlugG: String
-    $valueG: [SortOrderEnum]
-    $greaterThan: Float
-    $lessThan: Float
-  ) {
-    allContentfulProduct(
-      filter: {
-        price: { gt: $greaterThan, lte: $lessThan }
-        categories: { elemMatch: { slug: { eq: $catSlugG } } }
-      }
-      sort: { fields: price, order: $valueG }
-    ) {
-      edges {
-        node {
-          price
-          slug
-          discountedPrice
-          image {
-            fluid {
-              src
-            }
-            title
-          }
-          productName {
-            productName
-          }
-          quantity
-          sku
-        }
-      }
-      totalCount
-    }
-  }
-`
 
 const MobileFilter = ({ catSlug, products }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false)

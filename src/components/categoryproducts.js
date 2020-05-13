@@ -18,13 +18,13 @@ import { client } from "../../wrap-with-provider"
 const SORT_FILTER_QUERY = gql`
   query sortFilterProducts(
     $catSlugG: String
-    $valueG: [SortOrderEnum]
+    $valueG: String
     $greaterThan: Float
     $lessThan: Float
-    $sortType: [StrapiProductFieldsEnum]
-    $fit: StrapiProductFilterSettingsInput
+    $sortType: String
+    $fit: String
   ) {
-    allContentfulProduct(
+    products(
       filter: {
         Price: { gt: $greaterThan, lte: $lessThan }
         Categories: { elemMatch: { slug: { eq: $catSlugG } } }
@@ -32,68 +32,67 @@ const SORT_FILTER_QUERY = gql`
       }
       sort: { fields: $sortType, order: $valueG }
     ) {
-      nodes {
-        id
-        ProductName
-        Description
-        slug
-        Price
-        DiscountedPrice
-        Variations {
-          SKU
-          Size
-          Color
-          Quantity
-          ProductImages {
-            caption
-            formats {
-              medium {
-                childImageSharp {
-                  fluid {
-                    src
-                  }
-                }
+      id
+      ProductName
+      Description
+      slug
+      Price
+      DiscountedPrice
+      Variations {
+        SKU
+        Size
+        Color
+        Quantity
+        ProductVariationsPics {
+          PictureCaption
+          ProductPicture {
+            childImageSharp {
+              fluid {
+                src
               }
             }
           }
         }
-        ProductFilterSettings {
-          Fit
-          Gender
-          SeasonType
-          Style
-        }
+      }
+      ProductFilterSettings {
+        Fit
+        Gender
+        SeasonType
+        Style
       }
     }
   }
 `
 const PRODUCT_QUERY = gql`
-  query sortProducts(
-    $catSlugG: String
-    $fit: StrapiProductFilterSettingsInput
-  ) {
-    allContentfulProduct(
+  query sortProducts($catSlugG: String, $fit: String) {
+    allStrapiProduct(
       filter: {
-        categories: { elemMatch: { slug: { eq: $catSlugG } } }
+        Categories: { elemMatch: { slug: { eq: $catSlugG } } }
         ProductFilterSettings: $fit
       }
     ) {
       nodes {
-        id
         ProductName
+        id
         Description
         slug
         Price
         DiscountedPrice
         Variations {
-          SKU
-          Size
-          Color
-          Quantity
-          ProductImages {
-            caption
-            url
+          ProductVariationsPics {
+            PictureCaption
+            ProductPicture {
+              childImageSharp {
+                fluid {
+                  src
+                }
+              }
+            }
           }
+          Color
+          SKU
+          Quantity
+          Size
         }
         ProductFilterSettings {
           Fit
@@ -102,6 +101,7 @@ const PRODUCT_QUERY = gql`
           Style
         }
       }
+      totalCount
     }
   }
 `
@@ -259,7 +259,7 @@ const CategoryProducts = ({ catSlug }) => {
                       : parseFloat(item.value / minPriceInterval - 1) *
                         minPriceInterval,
                   lessThan: parseFloat(item.value),
-                  sortType: "price",
+                  sortType: "Price",
                   fit: fullFiltersBoolean ? tempString : fullFitFilters,
                 },
               })
@@ -277,7 +277,7 @@ const CategoryProducts = ({ catSlug }) => {
                   valueG: "ASC",
                   greaterThan: parseFloat(item.value - minPriceInterval),
                   lessThan: parseFloat(157680),
-                  sortType: "price",
+                  sortType: "Price",
                   fit: fullFiltersBoolean ? tempString : fullFitFilters,
                 },
               })
@@ -304,7 +304,7 @@ const CategoryProducts = ({ catSlug }) => {
                               minPriceInterval
                           ),
                     lessThan: parseFloat(item.value),
-                    sortType: "price",
+                    sortType: "Price",
                     fit: fullFiltersBoolean ? tempString : fullFitFilters,
                   },
                 })
@@ -321,7 +321,7 @@ const CategoryProducts = ({ catSlug }) => {
                     valueG: sortProductState,
                     greaterThan: parseFloat(item.value - minPriceInterval),
                     lessThan: parseFloat(157680),
-                    sortType: "price",
+                    sortType: "Price",
                     fit: fullFiltersBoolean ? tempString : fullFitFilters,
                   },
                 })
@@ -346,7 +346,7 @@ const CategoryProducts = ({ catSlug }) => {
                               minPriceInterval
                           ),
                     lessThan: parseFloat(item.value),
-                    sortType: "price",
+                    sortType: "Price",
                     fit: fullFiltersBoolean ? tempString : fullFitFilters,
                   },
                 })
@@ -363,7 +363,7 @@ const CategoryProducts = ({ catSlug }) => {
                     valueG: "ASC",
                     greaterThan: parseFloat(item.value - minPriceInterval),
                     lessThan: parseFloat(157680),
-                    sortType: "price",
+                    sortType: "Price",
                     fit: fullFiltersBoolean ? tempString : fullFitFilters,
                   },
                 })
@@ -388,7 +388,7 @@ const CategoryProducts = ({ catSlug }) => {
                               minPriceInterval
                           ),
                     lessThan: parseFloat(item.value),
-                    sortType: "price",
+                    sortType: "Price",
                     fit: fullFiltersBoolean ? tempString : fullFitFilters,
                   },
                 })
@@ -405,7 +405,7 @@ const CategoryProducts = ({ catSlug }) => {
                     valueG: "ASC",
                     greaterThan: parseFloat(item.value - minPriceInterval),
                     lessThan: parseFloat(157680),
-                    sortType: "price",
+                    sortType: "Price",
                     fit: fullFiltersBoolean ? tempString : fullFitFilters,
                   },
                 })
@@ -427,7 +427,7 @@ const CategoryProducts = ({ catSlug }) => {
               valueG: sortProductState,
               greaterThan: parseFloat(0),
               lessThan: parseFloat(157680),
-              sortType: "price",
+              sortType: "Price",
               fit: fullFiltersBoolean ? tempString : fullFitFilters,
             },
           })
