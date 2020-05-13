@@ -31,14 +31,12 @@ export const query = graphql`
           Size
           Color
           Quantity
-          ProductImages {
-            caption
-            formats {
-              medium {
-                childImageSharp {
-                  fluid {
-                    src
-                  }
+          ProductVariationsPics {
+            PictureCaption
+            ProductPicture {
+              childImageSharp {
+                fluid {
+                  src
                 }
               }
             }

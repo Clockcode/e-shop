@@ -497,22 +497,20 @@ const CategoryProducts = ({ catSlug }) => {
       <section className={catProductsStyle.catWraper}>
         {categoryProductsState && categoryProductsState.length > 0 ? (
           categoryProductsState.map(item => {
-            console.info(
-              item.Variations[0].ProductImages[0].formats.medium,
-              "prod check"
-            )
             return (
               <article>
                 <Link to={`${catSlug}/${item.slug}`}>
                   <span id={catProductsStyle.best}>BEST</span>
-                  {item.Variations[0].ProductImages[0].formats.medium !=
-                  null ? (
+                  {item.Variations[0].ProductVariationsPics[0] != null ? (
                     <img
                       src={
-                        item.Variations[0].ProductImages[0].formats.medium
-                          .childImageSharp.fluid.src
+                        item.Variations[0].ProductVariationsPics[0]
+                          .ProductPicture.childImageSharp.fluid.src
                       }
-                      alt={item.Variations[0].ProductImages[0].caption}
+                      alt={
+                        item.Variations[0].ProductVariationsPics[0]
+                          .ProductPicture.PictureCaption
+                      }
                     />
                   ) : null}
                 </Link>

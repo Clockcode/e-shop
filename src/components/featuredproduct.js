@@ -13,8 +13,8 @@ const FeaturedProduct = ({ featuredProducts }) => {
                   <a className={mainpageStyle.productWrapper}>
                     <img
                       src={
-                        item.Variations[0].ProductImages[0].formats.medium
-                          .childImageSharp.fluid.src
+                        item.Variations[0].ProductVariationsPics[0]
+                          .ProductPicture.childImageSharp.fluid.src
                       }
                       alt="product image"
                     />

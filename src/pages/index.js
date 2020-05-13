@@ -47,13 +47,12 @@ export const pageQuery = graphql`
               PageContent
             }
           }
-          BelowImages {
-            formats {
-              large {
-                childImageSharp {
-                  fluid {
-                    src
-                  }
+          SectionBelow {
+            SectionCaption
+            SectionImage {
+              childImageSharp {
+                fluid {
+                  src
                 }
               }
             }
@@ -80,14 +79,12 @@ export const pageQuery = graphql`
               Size
               Quantity
               SKU
-              ProductImages {
-                caption
-                formats {
-                  medium {
-                    childImageSharp {
-                      fluid {
-                        src
-                      }
+              ProductVariationsPics {
+                PictureCaption
+                ProductPicture {
+                  childImageSharp {
+                    fluid {
+                      src
                     }
                   }
                 }
@@ -109,8 +106,8 @@ const IndexPage = ({ data }) => {
   let menImage = `${data.allStrapiHomePage.edges[0].node.Banner[1].Picture.childImageSharp.fluid.src}`
   // let bannerImage = `${data.allStrapiHomePage.edges[0].node.firstRow[2].fluid.src}`
 
-  let firstImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[0].formats.large.childImageSharp.fluid.src}`
-  let secondImage = `${data.allStrapiHomePage.edges[0].node.BelowImages[1].formats.large.childImageSharp.fluid.src}`
+  let firstImage = `${data.allStrapiHomePage.edges[0].node.SectionBelow[0].SectionImage.childImageSharp.fluid.src}`
+  let secondImage = `${data.allStrapiHomePage.edges[0].node.SectionBelow[1].SectionImage.childImageSharp.fluid.src}`
   let description = data.allStrapiHomePage.edges[0].node.Description
 
   // let longDescription =
