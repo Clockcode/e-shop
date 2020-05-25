@@ -16,28 +16,18 @@ import {
 import { client } from "../../wrap-with-provider"
 
 const SORT_FILTER_QUERY = gql`
-  query sortFilterProducts(
-    $catSlugG: String
-    $valueG: String
-    $greaterThan: Float
-    $lessThan: Float
-    $sortType: String
-    $fit: String
-  ) {
-    products(
-      filter: {
-        Price: { gt: $greaterThan, lte: $lessThan }
-        Categories: { elemMatch: { slug: { eq: $catSlugG } } }
-        ProductFilterSettings: $fit
-      }
-      sort: { fields: $sortType, order: $valueG }
-    ) {
+  query sortFilterProducts($input: JSON, $sortType: String) {
+    products(where: $input, sort: $sortType) {
       id
       ProductName
       Description
       slug
       Price
       DiscountedPrice
+      Categories {
+        Title
+        slug
+      }
       Variations {
         SKU
         Size
@@ -46,62 +36,46 @@ const SORT_FILTER_QUERY = gql`
         ProductVariationsPics {
           PictureCaption
           ProductPicture {
-            childImageSharp {
-              fluid {
-                src
-              }
-            }
+            formats
           }
         }
       }
-      ProductFilterSettings {
-        Fit
-        Gender
-        SeasonType
-        Style
-      }
+      Fit
+      Gender
+      SeasonType
+      Style
     }
   }
 `
 const PRODUCT_QUERY = gql`
-  query sortProducts($catSlugG: String, $fit: String) {
-    allStrapiProduct(
-      filter: {
-        Categories: { elemMatch: { slug: { eq: $catSlugG } } }
-        ProductFilterSettings: $fit
-      }
-    ) {
-      nodes {
-        ProductName
-        id
-        Description
+  query sortProducts($input: JSON, $sortType: String) {
+    products(where: $input, sort: $sortType) {
+      id
+      ProductName
+      Description
+      slug
+      Price
+      DiscountedPrice
+      Categories {
+        Title
         slug
-        Price
-        DiscountedPrice
-        Variations {
-          ProductVariationsPics {
-            PictureCaption
-            ProductPicture {
-              childImageSharp {
-                fluid {
-                  src
-                }
-              }
-            }
+      }
+      Variations {
+        SKU
+        Size
+        Color
+        Quantity
+        ProductVariationsPics {
+          PictureCaption
+          ProductPicture {
+            formats
           }
-          Color
-          SKU
-          Quantity
-          Size
-        }
-        ProductFilterSettings {
-          Fit
-          Gender
-          SeasonType
-          Style
         }
       }
-      totalCount
+      Fit
+      Gender
+      SeasonType
+      Style
     }
   }
 `
@@ -166,303 +140,247 @@ const CategoryProducts = ({ catSlug }) => {
 
   const fetchFilterSortCategorieProducts = () => {
     let tempArray = checkedPriceFilters
-    let letfitArray = checkedFitFiltersState.map(item => item.value)
-    let styledArray = checkedStyledFiltersState.map(item => item.value)
-    let seasonArray = checkedSeasonFiltersState.map(item => item.value)
-    // let letfitArray = ["Slim", "Oversized"]
-    let fullFiltersBoolean =
-      checkedFitFiltersState.length > 0 ||
-      checkedStyledFiltersState.length > 0 ||
-      checkedSeasonFiltersState.length > 0
+    let fitArray = checkedFitFiltersState.map(item => item)
+    let styledArray = checkedStyledFiltersState.map(item => item)
+    let seasonArray = checkedSeasonFiltersState.map(item => item)
 
-    const fullFitFilters = {
-      Fit: { in: ["Slim", "Oversized", "Cropped", "Regular"] },
-      Style: { in: ["Jacket", "Biker", "Blazer", "Coat", "Mac"] },
-      SeasonType: {
-        in: ["New Season", "Regular", "Best Seller", "Discounted"],
+    let queryObj = {
+      variables: {
+        input: {
+          Categories: { slug: `${catSlug}` },
+          Fit_in: fitArray.length > 0 ? fitArray : undefined,
+          Style_in: styledArray.length > 0 ? styledArray : undefined,
+          SeasonType_in: seasonArray.length > 0 ? seasonArray : undefined,
+        },
+        sortType: sortProductState === "null" ? undefined : sortProductState,
       },
     }
-    let tempString = {}
-    let temp1 = {}
-    let temp2 = {}
-    let temp3 = {}
 
-    if (letfitArray.length > 0) {
-      temp1 = { Fit: { in: letfitArray } }
-    }
-    if (styledArray.length > 0) {
-      temp2 = { Style: { in: styledArray } }
-    }
-    if (seasonArray.length > 0) {
-      temp3 = { SeasonType: { in: seasonArray } }
-    }
-
-    if (
-      letfitArray.length > 0 &&
-      styledArray.length > 0 &&
-      seasonArray.length === 0
-    ) {
-      tempString = { ...temp1, ...temp2 }
-    } else if (
-      seasonArray.length > 0 &&
-      styledArray.length > 0 &&
-      letfitArray.length === 0
-    ) {
-      tempString = { ...temp3, ...temp2 }
-    } else if (
-      seasonArray.length > 0 &&
-      letfitArray.length > 0 &&
-      styledArray.length === 0
-    ) {
-      tempString = { ...temp3, ...temp1 }
-    } else if (
-      seasonArray.length > 0 &&
-      letfitArray.length > 0 &&
-      styledArray.length > 0
-    ) {
-      tempString = { ...temp3, ...temp1, ...temp2 }
-    } else if (
-      letfitArray.length > 0 &&
-      styledArray.length === 0 &&
-      seasonArray.length === 0
-    ) {
-      tempString = temp1
-    } else if (
-      letfitArray.length === 0 &&
-      styledArray.length > 0 &&
-      seasonArray.length === 0
-    ) {
-      tempString = temp2
-    } else if (
-      letfitArray.length === 0 &&
-      styledArray.length === 0 &&
-      seasonArray.length > 0
-    ) {
-      tempString = temp3
-    }
     if (tempArray.length > 0) {
       tempArray.map((item, index) => {
         if (index === 0) {
-          if (item.value / minPriceInterval != 5) {
+          if (item / minPriceInterval != 5) {
+            let greaterThan =
+              item / minPriceInterval === 1
+                ? parseFloat(0)
+                : parseFloat(item / minPriceInterval - 1) * minPriceInterval
+            let lessThan = parseFloat(item)
+
+            console.info(greaterThan, "greater", lessThan)
             client
               .query({
                 query: SORT_FILTER_QUERY,
                 variables: {
-                  catSlugG: catSlug,
-                  valueG:
-                    sortProductState === "ASC" || sortProductState === "DESC"
-                      ? sortProductState
-                      : "ASC",
-                  greaterThan:
-                    item.value / minPriceInterval === 1
-                      ? parseFloat(0)
-                      : parseFloat(item.value / minPriceInterval - 1) *
-                        minPriceInterval,
-                  lessThan: parseFloat(item.value),
-                  sortType: "Price",
-                  fit: fullFiltersBoolean ? tempString : fullFitFilters,
+                  input: {
+                    Categories: { slug: `${catSlug}` },
+                    Price_gt: `${
+                      item / minPriceInterval === 1
+                        ? parseFloat(0)
+                        : parseFloat(item / minPriceInterval - 1) *
+                          minPriceInterval
+                    }`,
+                    Price_lt: `${lessThan}`,
+                    Fit_in: fitArray.length > 0 ? fitArray : undefined,
+                    Style_in: styledArray.length > 0 ? styledArray : undefined,
+                    SeasonType_in:
+                      seasonArray.length > 0 ? seasonArray : undefined,
+                  },
+                  sortType:
+                    sortProductState === "null" ? undefined : sortProductState,
                 },
               })
               .then(res => {
-                let categoryProducts = res.data.allContentfulProduct.nodes
+                console.info("data ozan", res)
+
+                let categoryProducts = res.data.products
                 dispatch(sortCategorieProducts(categoryProducts))
-                console.info("catpros", CategoryProducts)
               })
           } else {
+            let greaterThan = parseFloat(item - minPriceInterval)
             client
               .query({
                 query: SORT_FILTER_QUERY,
                 variables: {
-                  catSlugG: catSlug,
-                  valueG: "ASC",
-                  greaterThan: parseFloat(item.value - minPriceInterval),
-                  lessThan: parseFloat(157680),
-                  sortType: "Price",
-                  fit: fullFiltersBoolean ? tempString : fullFitFilters,
+                  input: {
+                    Categories: { slug: `${catSlug}` },
+                    Price_gt: `${greaterThan}`,
+                    Fit_in: fitArray.length > 0 ? fitArray : undefined,
+                    Style_in: styledArray.length > 0 ? styledArray : undefined,
+                    SeasonType_in:
+                      seasonArray.length > 0 ? seasonArray : undefined,
+                  },
+                  sortType:
+                    sortProductState === "null" ? undefined : sortProductState,
                 },
               })
               .then(res => {
-                let categoryProducts = res.data.allContentfulProduct.nodes
+                console.info("data ozan", res)
+
+                let categoryProducts = res.data.products
                 dispatch(sortCategorieProducts(categoryProducts))
               })
           }
         } else if (index > 0) {
-          if (sortProductState === "ASC" || sortProductState === "DESC") {
-            let tempValue = item.value
-            if (item.value / minPriceInterval != 5) {
+          if (sortProductState !== "null") {
+            let tempValue = item
+            let greaterThan =
+              item / minPriceInterval === 1
+                ? parseFloat(0)
+                : parseFloat((item / minPriceInterval - 1) * minPriceInterval)
+            if (item / minPriceInterval != 5) {
               client
                 .query({
                   query: SORT_FILTER_QUERY,
                   variables: {
-                    catSlugG: catSlug,
-                    valueG: sortProductState,
-                    greaterThan:
-                      item.value / minPriceInterval === 1
-                        ? parseFloat(0)
-                        : parseFloat(
-                            (item.value / minPriceInterval - 1) *
-                              minPriceInterval
-                          ),
-                    lessThan: parseFloat(item.value),
-                    sortType: "Price",
-                    fit: fullFiltersBoolean ? tempString : fullFitFilters,
+                    input: {
+                      Categories: { slug: `${catSlug}` },
+                      Price_gt: `${greaterThan}`,
+                      Price_lte: `${tempValue}`,
+                      Fit_in: fitArray.length > 0 ? fitArray : undefined,
+                      Style_in:
+                        styledArray.length > 0 ? styledArray : undefined,
+                      SeasonType_in:
+                        seasonArray.length > 0 ? seasonArray : undefined,
+                    },
+                    sortType:
+                      sortProductState === "null"
+                        ? undefined
+                        : sortProductState,
                   },
                 })
                 .then(res => {
-                  const categoryProducts = res.data.allContentfulProduct.nodes
+                  console.info("data ozan", res)
+                  const categoryProducts = res.data.products
                   dispatch(filterByPriceAdd({ categoryProducts, tempValue }))
                 })
             } else {
+              let greaterThan = parseFloat(item - minPriceInterval)
               client
                 .query({
                   query: SORT_FILTER_QUERY,
                   variables: {
-                    catSlugG: catSlug,
-                    valueG: sortProductState,
-                    greaterThan: parseFloat(item.value - minPriceInterval),
-                    lessThan: parseFloat(157680),
-                    sortType: "Price",
-                    fit: fullFiltersBoolean ? tempString : fullFitFilters,
+                    variables: {
+                      input: {
+                        Categories: { slug: `${catSlug}` },
+                        Price_gt: `${greaterThan}`,
+                        Fit_in: fitArray.length > 0 ? fitArray : undefined,
+                        Style_in:
+                          styledArray.length > 0 ? styledArray : undefined,
+                        SeasonType_in:
+                          seasonArray.length > 0 ? seasonArray : undefined,
+                      },
+                      sortType:
+                        sortProductState === "null"
+                          ? undefined
+                          : sortProductState,
+                    },
                   },
                 })
                 .then(res => {
-                  const categoryProducts = res.data.allContentfulProduct.nodes
+                  console.info("data ozan", res)
+                  const categoryProducts = res.data.products
                   dispatch(filterByPriceAdd({ categoryProducts, tempValue }))
                 })
             }
-          } else if (sortProductState === "r") {
-            if (item.value / minPriceInterval != 5) {
+          } else if (sortProductState === "null") {
+            if (item / minPriceInterval != 5) {
+              let greaterThan =
+                item / minPriceInterval === 1
+                  ? parseFloat(0)
+                  : parseFloat((item / minPriceInterval - 1) * minPriceInterval)
               client
                 .query({
                   query: SORT_FILTER_QUERY,
                   variables: {
-                    catSlugG: catSlug,
-                    valueG: "ASC",
-                    greaterThan:
-                      item.value / minPriceInterval === 1
-                        ? parseFloat(0)
-                        : parseFloat(
-                            (item.value / minPriceInterval - 1) *
-                              minPriceInterval
-                          ),
-                    lessThan: parseFloat(item.value),
-                    sortType: "Price",
-                    fit: fullFiltersBoolean ? tempString : fullFitFilters,
+                    input: {
+                      Categories: { slug: `${catSlug}` },
+                      Price_gt: `${greaterThan}`,
+                      Price_lte: `${item}`,
+                      Fit_in: fitArray.length > 0 ? fitArray : undefined,
+                      Style_in:
+                        styledArray.length > 0 ? styledArray : undefined,
+                      SeasonType_in:
+                        seasonArray.length > 0 ? seasonArray : undefined,
+                    },
+                    sortType:
+                      sortProductState === "null"
+                        ? undefined
+                        : sortProductState,
                   },
                 })
                 .then(res => {
-                  const categoryProducts = res.data.allContentfulProduct.nodes
+                  console.info("data ozan", res)
+                  const categoryProducts = res.data.products
                   dispatch(filterByPrice(categoryProducts))
                 })
             } else {
+              let greaterThan = parseFloat(item - minPriceInterval)
               client
                 .query({
                   query: SORT_FILTER_QUERY,
                   variables: {
-                    catSlugG: catSlug,
-                    valueG: "ASC",
-                    greaterThan: parseFloat(item.value - minPriceInterval),
-                    lessThan: parseFloat(157680),
-                    sortType: "Price",
-                    fit: fullFiltersBoolean ? tempString : fullFitFilters,
+                    input: {
+                      Categories: { slug: `${catSlug}` },
+                      Price_gt: `${greaterThan}`,
+                      Fit_in: fitArray.length > 0 ? fitArray : undefined,
+                      Style_in:
+                        styledArray.length > 0 ? styledArray : undefined,
+                      SeasonType_in:
+                        seasonArray.length > 0 ? seasonArray : undefined,
+                    },
+                    sortType:
+                      sortProductState === "null"
+                        ? undefined
+                        : sortProductState,
                   },
                 })
                 .then(res => {
-                  const categoryProducts = res.data.allContentfulProduct.nodes
-                  dispatch(filterByPrice(categoryProducts))
-                })
-            }
-          } else if (sortProductState === "highest-discount") {
-            if (item.value / minPriceInterval != 5) {
-              client
-                .query({
-                  query: SORT_FILTER_QUERY,
-                  variables: {
-                    catSlugG: catSlug,
-                    valueG: "ASC",
-                    greaterThan:
-                      item.value / minPriceInterval === 1
-                        ? parseFloat(0)
-                        : parseFloat(
-                            (item.value / minPriceInterval - 1) *
-                              minPriceInterval
-                          ),
-                    lessThan: parseFloat(item.value),
-                    sortType: "Price",
-                    fit: fullFiltersBoolean ? tempString : fullFitFilters,
-                  },
-                })
-                .then(res => {
-                  const categoryProducts = res.data.allContentfulProduct.nodes
-                  dispatch(filterByPrice(categoryProducts))
-                })
-            } else {
-              client
-                .query({
-                  query: SORT_FILTER_QUERY,
-                  variables: {
-                    catSlugG: catSlug,
-                    valueG: "ASC",
-                    greaterThan: parseFloat(item.value - minPriceInterval),
-                    lessThan: parseFloat(157680),
-                    sortType: "Price",
-                    fit: fullFiltersBoolean ? tempString : fullFitFilters,
-                  },
-                })
-                .then(res => {
-                  const categoryProducts = res.data.allContentfulProduct.nodes
+                  console.info("data ozan", res)
+                  const categoryProducts = res.data.products
                   dispatch(filterByPrice(categoryProducts))
                 })
             }
           }
         }
       })
-    } else if (fullFiltersBoolean && tempArray.length === 0) {
-      if (sortProductState === "ASC" || sortProductState === "DESC") {
+    } else if (tempArray.length === 0) {
+      if (sortProductState !== "null") {
         client
           .query({
             query: SORT_FILTER_QUERY,
             variables: {
-              catSlugG: catSlug,
-              valueG: sortProductState,
-              greaterThan: parseFloat(0),
-              lessThan: parseFloat(157680),
-              sortType: "Price",
-              fit: fullFiltersBoolean ? tempString : fullFitFilters,
+              input: {
+                Categories: { slug: `${catSlug}` },
+                Fit_in: fitArray.length > 0 ? fitArray : undefined,
+                Style_in: styledArray.length > 0 ? styledArray : undefined,
+                SeasonType_in: seasonArray.length > 0 ? seasonArray : undefined,
+              },
+              sortType: sortProductState,
             },
           })
+
           .then(res => {
-            const categoryProducts = res.data.allContentfulProduct.nodes
+            console.info("data ozan", res)
+            const categoryProducts = res.data.products
             dispatch(sortCategorieProducts(categoryProducts))
           })
-      } else if (sortProductState === "r") {
+      } else if (sortProductState === "null") {
         client
           .query({
             query: PRODUCT_QUERY,
             variables: {
-              catSlugG: catSlug,
-              fit: fullFiltersBoolean ? tempString : fullFitFilters,
+              input: {
+                Categories: { slug: `${catSlug}` },
+                Fit_in: fitArray.length > 0 ? fitArray : undefined,
+                Style_in: styledArray.length > 0 ? styledArray : undefined,
+                SeasonType_in: seasonArray.length > 0 ? seasonArray : undefined,
+              },
+              sortType: undefined,
             },
           })
           .then(res => {
-            const categoryProducts = res.data.allContentfulProduct.nodes
-            dispatch(sortCategorieProducts(categoryProducts))
-          })
-      } else if (sortProductState === "highest-discount") {
-        client
-          .query({
-            query: SORT_FILTER_QUERY,
-            variables: {
-              catSlugG: catSlug,
-              valueG: "ASC",
-              greaterThan: parseFloat(0),
-              lessThan: parseFloat(157680),
-              sortType: "discountedPrice",
-              fit: fullFiltersBoolean ? tempString : fullFitFilters,
-            },
-          })
-          .then(res => {
-            const categoryProducts = res.data.allContentfulProduct.nodes
+            console.info("data ozan", res)
+            const categoryProducts = res.data.products
             dispatch(sortCategorieProducts(categoryProducts))
           })
       }
@@ -499,9 +417,10 @@ const CategoryProducts = ({ catSlug }) => {
           categoryProductsState.map(item => {
             return (
               <article>
-                <Link to={`${catSlug}/${item.slug}`}>
+                <Link to={`${item.slug}`}>
                   <span id={catProductsStyle.best}>BEST</span>
-                  {item.Variations[0].ProductVariationsPics[0] != null ? (
+                  {item.Variations[0].ProductVariationsPics[0].ProductPicture
+                    .childImageSharp != null ? (
                     <img
                       src={
                         item.Variations[0].ProductVariationsPics[0]
@@ -512,7 +431,18 @@ const CategoryProducts = ({ catSlug }) => {
                           .ProductPicture.PictureCaption
                       }
                     />
-                  ) : null}
+                  ) : (
+                    <img
+                      src={
+                        item.Variations[0].ProductVariationsPics[0]
+                          .ProductPicture.formats.large.url
+                      }
+                      alt={
+                        item.Variations[0].ProductVariationsPics[0]
+                          .ProductPicture.PictureCaption
+                      }
+                    />
+                  )}
                 </Link>
                 <div className={catProductsStyle.productInfo}>
                   <h4>{item.ProductName}</h4>

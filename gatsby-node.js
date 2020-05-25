@@ -124,7 +124,7 @@ exports.createPages = ({ graphql, actions }) => {
 
           productPages.forEach(page => {
             createPage({
-              path: `/${page.node.Categories[0].slug}/${page.node.slug}`,
+              path: `/${page.node.slug}/`,
               component: productPage,
               context: {
                 slug: page.node.slug,

@@ -20,7 +20,7 @@ const initialState = {
   loading: true,
   currentPage: 1,
   productPerPage: 6,
-  sortProductState: "r",
+  sortProductState: "null",
 }
 
 const categoryReducer = (state = initialState, { type, payload }) => {
@@ -82,21 +82,21 @@ const categoryReducer = (state = initialState, { type, payload }) => {
       let tempArr = []
       let tempCats = state.categoryProducts
       tempCats.map(item => {
-        tempArr.push(item.node.price)
+        tempArr.push(item.Price)
       })
 
       let maxValue = Math.max(...tempArr)
 
       let checkAgainTemp = parseFloat(maxValue) > parseFloat(payload.tempValue)
 
-      if (state.sortProductState === "ASC") {
+      if (state.sortProductState === "Price:asc") {
         return {
           ...state,
           categoryProducts: checkAgainTemp
             ? [...payload.categoryProducts, ...state.categoryProducts]
             : [...state.categoryProducts, ...payload.categoryProducts],
         }
-      } else if (state.sortProductState === "DESC") {
+      } else if (state.sortProductState === "Price:desc") {
         return {
           ...state,
           categoryProducts: checkAgainTemp
@@ -116,14 +116,14 @@ const categoryReducer = (state = initialState, { type, payload }) => {
       let checkFirst = state.categoryProducts.some(
         item => item.node.price > payload.tempValue1
       )
-      if (state.sortProductState === "ASC") {
+      if (state.sortProductState === "Price:asc") {
         return {
           ...state,
           categoryProducts: checkFirst
             ? [...payload.categoryProducts, ...state.categoryProducts]
             : [...state.categoryProducts, ...payload.categoryProducts],
         }
-      } else if (state.sortProductState === "DESC") {
+      } else if (state.sortProductState === "Price:desc") {
         return {
           ...state,
           categoryProducts: checkFirst

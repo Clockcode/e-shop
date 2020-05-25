@@ -25,12 +25,12 @@ const filterReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         checkedPriceFilters: state.checkedPriceFilters.some(
-          item => item.value === payload.value
+          item => item === parseInt(payload)
         )
           ? state.checkedPriceFilters.filter(
-              (item, index) => item.value !== payload.value
+              (item, index) => item !== parseInt(payload)
             )
-          : [...state.checkedPriceFilters, payload],
+          : [...state.checkedPriceFilters, parseInt(payload)],
       }
     case UNCHECKED_PRICE_FILTERS:
       return {
@@ -46,11 +46,9 @@ const filterReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         checkedFitFilters: state.checkedFitFilters.some(
-          item => item.value === payload.value
+          item => item === payload
         )
-          ? state.checkedFitFilters.filter(
-              (item, index) => item.value !== payload.value
-            )
+          ? state.checkedFitFilters.filter((item, index) => item !== payload)
           : [...state.checkedFitFilters, payload],
       }
     case UNCHECKED_FIT_FILTERS:
@@ -58,16 +56,13 @@ const filterReducer = (state = initialState, { type, payload }) => {
         ...state,
         checkedFitFilters: [],
       }
-
     case CHECKED_STYLE_FILTERS:
       return {
         ...state,
         checkedStyledFilters: state.checkedStyledFilters.some(
-          item => item.value === payload.value
+          item => item === payload
         )
-          ? state.checkedStyledFilters.filter(
-              (item, index) => item.value !== payload.value
-            )
+          ? state.checkedStyledFilters.filter((item, index) => item !== payload)
           : [...state.checkedStyledFilters, payload],
       }
     case UNCHECKED_STYLE_FILTERS:
@@ -80,11 +75,9 @@ const filterReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         checkedSeasonFilters: state.checkedSeasonFilters.some(
-          item => item.value === payload.value
+          item => item === payload
         )
-          ? state.checkedSeasonFilters.filter(
-              (item, index) => item.value !== payload.value
-            )
+          ? state.checkedSeasonFilters.filter((item, index) => item !== payload)
           : [...state.checkedSeasonFilters, payload],
       }
     case UNCHECKED_SEASON_FILTERS:

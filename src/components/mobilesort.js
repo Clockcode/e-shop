@@ -32,12 +32,12 @@ const MobileSort = ({ catSlug }) => {
       onChange={e => handleChange(e.target.value)}
       className={sortStyle.sortWrap}
     >
-      <option selected value="r">
+      <option selected value="null">
         Recommended
       </option>
-      <option value="ASC">Price Low - High</option>
-      <option value="DESC">Price High - Low</option>
-      <option value="highest-discount">Highest Discount</option>
+      <option value="Price:asc">Price Low - High</option>
+      <option value="Price:desc">Price High - Low</option>
+      <option value="DiscountedPrice:asc">Highest Discount</option>
     </select>
   )
 }

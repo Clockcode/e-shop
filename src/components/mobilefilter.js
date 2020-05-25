@@ -20,59 +20,6 @@ import filterStyle from "./styles/filter.module.scss"
 
 import Checkbox from "@material-ui/core/Checkbox"
 
-function Checkboxes({ index, interval }) {
-  const [checked, setChecked] = React.useState(true)
-  const dispatch = useDispatch()
-
-  const checkedPriceFiltersState = useSelector(
-    state => state.filterReducer.checkedPriceFilters,
-    shallowEqual
-  )
-
-  const handlePriceFilterClicked = e => {
-    filterProductsPrice(e)
-  }
-
-  const filterProductsPrice = e => {
-    let chekboxValue = e.target.value
-    let tempArray = checkedPriceFiltersState
-    let remove = false
-    if (tempArray.length > 0) {
-      remove = tempArray.some(item => item.value === chekboxValue)
-    }
-    if (remove) {
-      dispatch(setLastRemovedFilter(chekboxValue))
-    }
-
-    dispatch(checkedPriceFilters({ value: chekboxValue }))
-  }
-
-  return (
-    <React.Fragment>
-      <Checkbox
-        onChange={e => {
-          handlePriceFilterClicked(e)
-        }}
-        color="primary"
-        inputProps={{ "aria-label": "secondary checkbox" }}
-        value={(index + 1) * interval}
-      />
-      {/* <Checkbox inputProps={{ "aria-label": "uncontrolled-checkbox" }} /> */}
-      {/* <Checkbox disabled inputProps={{ "aria-label": "disabled checkbox" }} /> */}
-      {/* <Checkbox
-        defaultChecked
-        color="default"
-        inputProps={{ "aria-label": "checkbox with default color" }}
-      /> */}
-      {/* <Checkbox
-        defaultChecked
-        size="small"
-        inputProps={{ "aria-label": "checkbox with small size" }}
-      /> */}
-    </React.Fragment>
-  )
-}
-
 const customStyles = {
   content: {
     // top: "10vh",
@@ -105,6 +52,7 @@ const customStyles = {
 
 const MobileFilter = ({ catSlug, products }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false)
+  const [check, setCheck] = React.useState(true)
 
   const dispatch = useDispatch()
 
@@ -151,7 +99,7 @@ const MobileFilter = ({ catSlug, products }) => {
       dispatch(setLastRemovedFilter(chekboxValue))
     }
 
-    dispatch(checkedPriceFilters({ value: chekboxValue }))
+    dispatch(checkedPriceFilters(chekboxValue))
   }
 
   const renderDynamicPriceFilter = (interval, rowNumber) => {
@@ -161,39 +109,45 @@ const MobileFilter = ({ catSlug, products }) => {
         {Array(5)
           .fill(0, 0, 5)
           .map((item, index) => {
+            let checkVarFunction = element =>
+              element === parseInt((index + 1) * interval)
+            let checkVar =
+              checkedPriceFiltersState.length > 0
+                ? checkedPriceFiltersState.some(checkVarFunction)
+                : false
             if (index !== 4) {
               return (
                 <div style={{ display: "flex" }}>
-                  <span
-                    id={index}
-                    className={
-                      checkedPriceFiltersState.some(
-                        item => parseInt(item.value) === (index + 1) * interval
-                      )
-                        ? "active"
-                        : "not-active"
-                    }
-                  ></span>
-                  <Checkboxes index={index} interval={interval} />
+                  <Checkbox
+                    onChange={e => {
+                      handlePriceFilterClicked(e)
+                    }}
+                    color="primary"
+                    inputProps={{ "aria-label": "secondary checkbox" }}
+                    value={(index + 1) * interval}
+                    checked={checkVar}
+                  />
                   <label className={filterStyle.labelself} for="Price Filter">
                     {index * interval}$ - ${(index + 1) * interval}
                   </label>
                 </div>
               )
             } else if (index === 4) {
+              let checkVarFunction = element =>
+                element === parseInt((index + 1) * interval)
+              let checkVar = checkedPriceFiltersState.some(checkVarFunction)
+
               return (
                 <div style={{ display: "flex" }}>
-                  <span
-                    id={index}
-                    className={
-                      checkedPriceFiltersState.some(
-                        item => parseInt(item.value) === (index + 1) * interval
-                      )
-                        ? "active"
-                        : "not-active"
-                    }
-                  ></span>
-                  <Checkboxes index={index} interval={interval} />
+                  <Checkbox
+                    onChange={e => {
+                      handlePriceFilterClicked(e)
+                    }}
+                    color="primary"
+                    checked={checkVar}
+                    inputProps={{ "aria-label": "secondary checkbox" }}
+                    value={(index + 1) * interval}
+                  />
                   <label className={filterStyle.labelself} for="Price Filter">
                     {index * interval}$ - Above
                   </label>
@@ -204,9 +158,6 @@ const MobileFilter = ({ catSlug, products }) => {
       </div>
     )
   }
-
-  // Creatinf Filters Dynamically
-  const renderFilters = () => {}
 
   useEffect(() => {
     dispatch(uncheckedPriceFilters())

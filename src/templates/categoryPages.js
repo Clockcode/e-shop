@@ -42,12 +42,10 @@ export const query = graphql`
             }
           }
         }
-        ProductFilterSettings {
-          Fit
-          Gender
-          SeasonType
-          Style
-        }
+        Fit
+        Gender
+        SeasonType
+        Style
       }
     }
     strapiHomePage {
@@ -119,7 +117,6 @@ const CategoryPages = data => {
   ])
 
   const isMobile = window.innerWidth <= 510
-  console.info("cagdas", data)
 
   let navTemp = data.data.strapiHomePage.NavigationMenu
 
