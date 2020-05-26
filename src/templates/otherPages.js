@@ -58,7 +58,6 @@ const otherPages = ({ data }) => {
           <h1>{data.strapiMenuOtherPages.Title}</h1>
           <p>{data.strapiMenuOtherPages.PageContent}</p>
         </div>
-
         <Footer
           footerText={data.strapiHomePage.Footer.FoooterText}
           helpPages={data.strapiHomePage.Footer.footer_help_pages}
