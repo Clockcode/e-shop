@@ -1,13 +1,12 @@
 .sortWrap {
   width: 50%;
   font-size: 1rem;
-  padding: 1rem 0 1rem 0;
   text-align: left;
   background-color: #f8f8f8;
   margin: 0.5em;
 }
 @media all and (min-width: 510px) {
-  .sortWrap{
+  .sortWrap {
     width: 100%;
     text-align: center;
   }

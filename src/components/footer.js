@@ -38,7 +38,6 @@ const Footer = ({ companyPages, helpPages, footerText }) => {
               <img src={twitter}></img>
             </a>
           </div>
-          <h5>@DERRY</h5>
         </div>
         <div className={footerStyle.footItem}>
           <h3>Help</h3>

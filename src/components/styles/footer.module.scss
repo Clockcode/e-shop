@@ -1,71 +1,71 @@
 footer {
-    position: relative;
-    width: 100vw;
-    box-sizing: border-box;
-    padding: 3rem 0 0 0;
-    border-top: 1px black solid;
-    .footItems{
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        margin: 0 auto;
-        padding: 2rem;
-        .footItem {
-            text-align: center;
-            width: 100vw;
-            padding: 1rem;
-            margin: 1rem;
-            h3 {
-                // font-family: 'Raleway';
-                font-family: 'Arapey', serif;
-                font-size: 1.4rem;
-            }
-            h4 {
-                text-decoration: none;
-                font-size: 1rem;
-            }
-            h5 {
-                display: none;
-            }
-
-            .socialLinks {
-                display: flex;
-                justify-content: center;
-                a {
-                    padding: 1rem;
-                    margin: .5rem;
-                    img {
-                        width: 1rem;
-                    }
-                }
-            }
-        }
-        
-        .middleDiv {
-            display: flex;
-            flex-direction: column;
-            .classy {
-                font-family: 'Arapey', serif;
-            }
-        }
-    }
-    .footerBottom {
-        // position: absolute;
-        // bottom: 10px;
-        // width: 100%;
-        height: 6rem;
-        background-color: #000;
+  position: relative;
+  width: 100vw;
+  box-sizing: border-box;
+  border-top: 1px black solid;
+  .footItems {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    padding: 2rem;
+    .footItem {
+      text-align: center;
+      width: 100vw;
+      padding: 1rem;
+      margin: 1rem;
+      h3 {
+        // font-family: 'Raleway';
+        font-family: "Arapey", serif;
+        font-size: 1.4rem;
+        font-weight: 900;
       }
-    
+      h4 {
+        font-size: 1.2rem;
+        margin: 0.5em 0;
+      }
+      h5 {
+        display: none;
+      }
+      a {
+        text-decoration: none;
+      }
+      .socialLinks {
+        display: flex;
+        justify-content: center;
+        a {
+          padding: 1rem;
+          margin: 0.5rem;
+          img {
+            width: 1rem;
+          }
+        }
+      }
+    }
+
+    .middleDiv {
+      display: flex;
+      flex-direction: column;
+      .classy {
+        font-family: "Arapey", serif;
+      }
+    }
+  }
+  .footerBottom {
+    // position: absolute;
+    // bottom: 10px;
+    // width: 100%;
+    height: 6rem;
+    background-color: #000;
+  }
 }
 
 @media all and (min-width: 510px) {
-    footer {
-
-        .footItems {
-            flex-wrap: nowrap;
-        }
+  footer {
+    .footItems {
+      flex-wrap: nowrap;
     }
+  }
 }
 //     footer {
 //         flex-wrap: wrap;

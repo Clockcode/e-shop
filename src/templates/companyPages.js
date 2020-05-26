@@ -4,6 +4,7 @@ import { Link, graphql } from "gatsby"
 import Header from "../components/header"
 import Footer from "../components/footer"
 import headerStyle from "../components/styles/header.module.scss"
+import footerPagesStyle from "../components/styles/footerPages.module.scss"
 
 import Layout from "../components/layout"
 
@@ -45,7 +46,6 @@ export const query = graphql`
 `
 
 const CompanyPages = ({ data }) => {
-  console.info(data, "ozan")
   return (
     <React.Fragment>
       <Layout>
@@ -54,10 +54,12 @@ const CompanyPages = ({ data }) => {
           otherPages={data.strapiHomePage.NavigationMenu.menu_other_pages}
           className={headerStyle.navigation}
         />
-        <h1>{data.strapiFooterCompanyPages.Title}</h1>
-        <p>{data.strapiFooterCompanyPages.PageContent}</p>
+        <div className={footerPagesStyle.pageWrapper}>
+          <h1>{data.strapiFooterCompanyPages.Title}</h1>
+          <p>{data.strapiFooterCompanyPages.PageContent}</p>
+        </div>
         <Footer
-          footerText={data.strapiHomePage.Footer.FooterText}
+          footerText={data.strapiHomePage.Footer.FoooterText}
           helpPages={data.strapiHomePage.Footer.footer_help_pages}
           companyPages={data.strapiHomePage.Footer.footer_company_pages}
         />
