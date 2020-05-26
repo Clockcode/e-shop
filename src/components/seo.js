@@ -17,6 +17,7 @@ function SEO({ description, metakeys, title, canonical }) {
         site {
           siteMetadata {
             author
+            siteTitle
           }
         }
       }

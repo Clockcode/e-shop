@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
-import { Link, graphql } from "gatsby"
+import { Link, graphql, useStaticQuery } from "gatsby"
+
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
 
 import CatBreadCrumb from "../components/catbreadcrumbs"
@@ -126,7 +127,6 @@ const CategoryPages = data => {
         categories={navTemp.categories}
         otherPages={navTemp.menu_other_pages}
         className={headerStyle.navigation}
-        siteTitle={data.data.strapiCategory.Title}
       />
       <CatBreadCrumb
         title={data.data.strapiCategory.Title}
@@ -145,7 +145,6 @@ const CategoryPages = data => {
           <MobileSort catSlug={data.data.strapiCategory.slug} />
         </div>
       )}
-
       <CategoryProducts catSlug={data.data.strapiCategory.slug} />
     </Layout>
   )

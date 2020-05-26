@@ -27,7 +27,8 @@ exports.createPages = ({ graphql, actions }) => {
   return new Promise((resolve, reject) => {
     const blogPost = path.resolve("./src/templates/blog.js")
     const otherPage = path.resolve("./src/templates/otherPages.js")
-    const footerPage = path.resolve("./src/templates/footerPages.js")
+    const companyPage = path.resolve("./src/templates/companyPages.js")
+    const helpPage = path.resolve("./src/templates/helpPages.js")
     const categoryPage = path.resolve("./src/templates/categoryPages.js")
     const productPage = path.resolve("./src/templates/productPages.js")
 
@@ -136,7 +137,7 @@ exports.createPages = ({ graphql, actions }) => {
         companyPages.forEach(page => {
           createPage({
             path: `/${page.node.slug}/`,
-            component: footerPage,
+            component: companyPage,
             context: {
               slug: page.node.slug,
             },
@@ -146,7 +147,7 @@ exports.createPages = ({ graphql, actions }) => {
         helpPages.forEach(page => {
           createPage({
             path: `/${page.node.slug}/`,
-            component: footerPage,
+            component: helpPage,
             context: {
               slug: page.node.slug,
             },

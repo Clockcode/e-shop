@@ -116,8 +116,7 @@ const IndexPage = ({ data }) => {
   let navTemp = data.allStrapiHomePage.edges[0].node
   let companyPages =
     data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
-  let helpPages =
-    data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
+  let helpPages = data.allStrapiHomePage.edges[0].node.Footer.footer_help_pages
   let footerText = data.allStrapiHomePage.edges[0].node.Footer.FoooterText
   return (
     <Layout>
@@ -132,7 +131,6 @@ const IndexPage = ({ data }) => {
         categories={navTemp.NavigationMenu.categories}
         otherPages={navTemp.NavigationMenu.menu_other_pages}
         className={headerStyle.navigation}
-        siteTitle={navTemp.HomePageTitle}
       />
       <MainpageIntro
         womenImage={womenImage}
