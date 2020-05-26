@@ -8,7 +8,6 @@ const BelowSection = ({
   firstImageTitle,
   secondImage,
   secondImageTitle,
-  longDescription,
 }) => {
   return (
     <section className={mainpageStyle.belowsection}>

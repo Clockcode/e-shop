@@ -98,9 +98,6 @@ export const pageQuery = graphql`
 `
 
 const IndexPage = ({ data }) => {
-  // let imageUrl = `https:${data.allContentfulMainPage.nodes[0].mainImage.fluid.src}`
-  console.info("ozan", data)
-
   let womenImage = `${data.allStrapiHomePage.edges[0].node.Banner[0].Picture.childImageSharp.fluid.src}`
   let womenCaption = `${data.allStrapiHomePage.edges[0].node.Banner[0].Caption}`
   let menImage = `${data.allStrapiHomePage.edges[0].node.Banner[1].Picture.childImageSharp.fluid.src}`
@@ -109,10 +106,10 @@ const IndexPage = ({ data }) => {
 
   let firstImage = `${data.allStrapiHomePage.edges[0].node.SectionBelow[0].SectionImage.childImageSharp.fluid.src}`
   let secondImage = `${data.allStrapiHomePage.edges[0].node.SectionBelow[1].SectionImage.childImageSharp.fluid.src}`
-  let description = data.allStrapiHomePage.edges[0].node.Description
+  let firstImageTitle = `${data.allStrapiHomePage.edges[0].node.SectionBelow[0].SectionCaption}`
+  let secondImageTitle = `${data.allStrapiHomePage.edges[0].node.SectionBelow[1].SectionCaption}`
 
-  // let longDescription =
-  //   data.allContentfulMainPage.nodes[0].longDescription.longDescription
+  let description = data.allStrapiHomePage.edges[0].node.Description
 
   let featuredProducts = data.allStrapiHomePage.edges[0].node.product
   let seoTemp = data.allStrapiHomePage.edges[0].node.Seo
@@ -121,6 +118,7 @@ const IndexPage = ({ data }) => {
     data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
   let helpPages =
     data.allStrapiHomePage.edges[0].node.Footer.footer_company_pages
+  let footerText = data.allStrapiHomePage.edges[0].node.Footer.FoooterText
   return (
     <Layout>
       <SEO
@@ -146,18 +144,17 @@ const IndexPage = ({ data }) => {
       <BelowSection
         firstImage={firstImage}
         secondImage={secondImage}
-        // firstImageTitle={data.allContentfulMainPage.nodes[0].secondRow[0].title}
-        // secondImageTitle={
-        //   data.allContentfulMainPage.nodes[0].secondRow[1].title
-        // }
-        // longDescription={longDescription}
+        firstImageTitle={firstImageTitle}
+        secondImageTitle={secondImageTitle}
       />
 
       <MailSignup description={description} />
-      {/* <h1>{data.allContentfulMainPage.nodes[0].mainTitle}</h1> */}
-      {/* <img src={imageUrl} alt="Girl in a Leather Jacket" /> */}
 
-      <Footer helpPages={helpPages} companyPages={companyPages} />
+      <Footer
+        footerText={footerText}
+        helpPages={helpPages}
+        companyPages={companyPages}
+      />
     </Layout>
   )
 }

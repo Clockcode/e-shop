@@ -202,10 +202,8 @@ export const OtherFilters = () => {
             color="primary"
             inputProps={{ "aria-label": "secondary checkbox" }}
             name="season"
-            value="New Season"
-            checked={checkedSeasonFiltersState.some(
-              item => item === "New Season"
-            )}
+            value="New"
+            checked={checkedSeasonFiltersState.some(item => item === "New")}
             onChange={e => {
               handleSeasonFilterClicked(e)
             }}
@@ -234,9 +232,9 @@ export const OtherFilters = () => {
             color="primary"
             inputProps={{ "aria-label": "secondary checkbox" }}
             name="season"
-            value="Best Seller"
+            value="BestSeller"
             checked={checkedSeasonFiltersState.some(
-              item => item === "Best Seller"
+              item => item === "BestSeller"
             )}
             onChange={e => {
               handleSeasonFilterClicked(e)

@@ -9,8 +9,7 @@ import {
   SORT_PRODUCTS,
   FILTER_PRODUCTS_BYPRICE,
   PRICE_FILTER_ADD_PRODUCT,
-  PRICE_FILTER_REMOVE_PRODUCT,
-  SORT_PRODUCTS_BY_PRICE,
+  SORT_PRODUCTS_BY_FILTER,
 } from "../type.js"
 
 const initialState = {
@@ -104,34 +103,41 @@ const categoryReducer = (state = initialState, { type, payload }) => {
             : [...payload.categoryProducts, ...state.categoryProducts],
         }
       }
-    case PRICE_FILTER_REMOVE_PRODUCT:
-      let tempArray = state.categoryProducts.filter(
-        item => !payload.categoryProducts.includes(item)
-      )
-      return {
-        ...state,
-        categoryProducts: tempArray,
-      }
-    case SORT_PRODUCTS_BY_PRICE:
-      let checkFirst = state.categoryProducts.some(
-        item => item.node.price > payload.tempValue1
-      )
-      if (state.sortProductState === "Price:asc") {
+    case SORT_PRODUCTS_BY_FILTER:
+      let tempArr2 = []
+      let tempArr3 = []
+      let tempCats2 = state.categoryProducts
+      let tempCats3 = payload
+      tempCats2.map(item => {
+        tempArr2.push(item.Price)
+      })
+      tempCats3.map(item => {
+        tempArr3.push(item.Price)
+      })
+      let maxValue2 = Math.max(...tempArr2)
+      let otherMaxValue = Math.max(...tempArr3)
+      let checkAgainTemp2 = parseFloat(maxValue2) > parseFloat(otherMaxValue)
+      if (
+        state.sortProductState === "Price:asc" ||
+        state.sortProductState === "DiscountedPrice:asc"
+      ) {
         return {
           ...state,
-          categoryProducts: checkFirst
-            ? [...payload.categoryProducts, ...state.categoryProducts]
-            : [...state.categoryProducts, ...payload.categoryProducts],
+          categoryProducts: checkAgainTemp2
+            ? [...payload, ...state.categoryProducts]
+            : [...state.categoryProducts, ...payload],
         }
-      } else if (state.sortProductState === "Price:desc") {
+      } else if (
+        state.sortProductState === "Price:desc" ||
+        state.sortProductState === "null"
+      ) {
         return {
           ...state,
-          categoryProducts: checkFirst
-            ? [...state.categoryProducts, ...payload.categoryProducts]
-            : [...payload.categoryProducts, ...state.categoryProducts],
+          categoryProducts: checkAgainTemp2
+            ? [...state.categoryProducts, ...payload]
+            : [...payload, ...state.categoryProducts],
         }
       }
-
     default:
       return state
   }

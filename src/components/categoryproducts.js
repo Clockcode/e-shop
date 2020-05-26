@@ -11,44 +11,12 @@ import {
   sortCategorieProducts,
   filterByPriceAdd,
   filterByPrice,
-  filterByPriceRemove,
+  sortCategorieProductsByFilter,
 } from "../state/actions/categoryActions"
 import { client } from "../../wrap-with-provider"
 
 const SORT_FILTER_QUERY = gql`
   query sortFilterProducts($input: JSON, $sortType: String) {
-    products(where: $input, sort: $sortType) {
-      id
-      ProductName
-      Description
-      slug
-      Price
-      DiscountedPrice
-      Categories {
-        Title
-        slug
-      }
-      Variations {
-        SKU
-        Size
-        Color
-        Quantity
-        ProductVariationsPics {
-          PictureCaption
-          ProductPicture {
-            formats
-          }
-        }
-      }
-      Fit
-      Gender
-      SeasonType
-      Style
-    }
-  }
-`
-const PRODUCT_QUERY = gql`
-  query sortProducts($input: JSON, $sortType: String) {
     products(where: $input, sort: $sortType) {
       id
       ProductName
@@ -344,46 +312,27 @@ const CategoryProducts = ({ catSlug }) => {
         }
       })
     } else if (tempArray.length === 0) {
-      if (sortProductState !== "null") {
-        client
-          .query({
-            query: SORT_FILTER_QUERY,
-            variables: {
-              input: {
-                Categories: { slug: `${catSlug}` },
-                Fit_in: fitArray.length > 0 ? fitArray : undefined,
-                Style_in: styledArray.length > 0 ? styledArray : undefined,
-                SeasonType_in: seasonArray.length > 0 ? seasonArray : undefined,
-              },
-              sortType: sortProductState,
+      client
+        .query({
+          query: SORT_FILTER_QUERY,
+          variables: {
+            input: {
+              Categories: { slug: `${catSlug}` },
+              Fit_in: fitArray.length > 0 ? fitArray : undefined,
+              Style_in: styledArray.length > 0 ? styledArray : undefined,
+              SeasonType_in: seasonArray.length > 0 ? seasonArray : undefined,
             },
-          })
+            sortType:
+              sortProductState === "null" ? undefined : sortProductState,
+          },
+        })
 
-          .then(res => {
-            console.info("data ozan", res)
-            const categoryProducts = res.data.products
-            dispatch(sortCategorieProducts(categoryProducts))
-          })
-      } else if (sortProductState === "null") {
-        client
-          .query({
-            query: PRODUCT_QUERY,
-            variables: {
-              input: {
-                Categories: { slug: `${catSlug}` },
-                Fit_in: fitArray.length > 0 ? fitArray : undefined,
-                Style_in: styledArray.length > 0 ? styledArray : undefined,
-                SeasonType_in: seasonArray.length > 0 ? seasonArray : undefined,
-              },
-              sortType: undefined,
-            },
-          })
-          .then(res => {
-            console.info("data ozan", res)
-            const categoryProducts = res.data.products
-            dispatch(sortCategorieProducts(categoryProducts))
-          })
-      }
+        .then(res => {
+          console.info("data ozan", res)
+          const categoryProducts = res.data.products
+
+          dispatch(sortCategorieProducts(categoryProducts))
+        })
     }
   }
 
@@ -455,7 +404,7 @@ const CategoryProducts = ({ catSlug }) => {
           <h1>Unfortunetely, there is no products in this category.</h1>
         )}
       </section>
-      {categoryProductsState && (
+      {categoryProductsState.length > 6 && (
         <Pagination
           productPerPage={productPerPageState}
           totalProducts={categoryProductsState.length}

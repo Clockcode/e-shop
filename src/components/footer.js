@@ -7,8 +7,7 @@ import twitter from "../images/twitter.svg"
 import linkedin from "../images/linkedin.svg"
 import instagram from "../images/instagram.svg"
 
-const Footer = ({ companyPages, helpPages }) => {
-
+const Footer = ({ companyPages, helpPages, footerText }) => {
   return (
     <footer>
       <div className={footerStyle.footItems}>
@@ -18,15 +17,13 @@ const Footer = ({ companyPages, helpPages }) => {
             companyPages.map(item => {
               return (
                 <h4>
-                  <Link to={item.slug}>{item.PageTitle}</Link>
+                  <Link to={item.slug}>{item.Title}</Link>
                 </h4>
               )
             })}
         </div>
         <div className={(footerStyle.middleDiv, footerStyle.footItem)}>
-          <h3 className={footerStyle.classy}>
-            Be part of our Thoughtful Fashion
-          </h3>
+          <h3 className={footerStyle.classy}>{footerText}</h3>
           <div className={footerStyle.socialLinks}>
             <a>
               <img src={facebook}></img>
@@ -49,7 +46,7 @@ const Footer = ({ companyPages, helpPages }) => {
             helpPages.map(item => {
               return (
                 <h4>
-                  <Link to={item.slug}>{item.PageTitle}</Link>
+                  <Link to={item.slug}>{item.Title}</Link>
                 </h4>
               )
             })}

@@ -9,18 +9,14 @@ import {
   SORT_PRODUCTS,
   FILTER_PRODUCTS_BYPRICE,
   PRICE_FILTER_ADD_PRODUCT,
-  PRICE_FILTER_REMOVE_PRODUCT,
-  SORT_PRODUCTS_BY_PRICE,
+  SORT_PRODUCTS_BY_FILTER,
 } from "../type"
 
 export const fetchCategories = payload => ({
   type: CATEGORY_FETCHING,
   payload: payload,
 })
-export const filterByPriceRemove = payload => ({
-  type: PRICE_FILTER_REMOVE_PRODUCT,
-  payload: payload,
-})
+
 export const filterByPriceAdd = payload => ({
   type: PRICE_FILTER_ADD_PRODUCT,
   payload: payload,
@@ -35,8 +31,8 @@ export const sortCategorieProducts = payload => ({
   payload: payload,
 })
 
-export const sortCategorieProductsByPrice = payload => ({
-  type: SORT_PRODUCTS_BY_PRICE,
+export const sortCategorieProductsByFilter = payload => ({
+  type: SORT_PRODUCTS_BY_FILTER,
   payload: payload,
 })
 export const setSortState = payload => ({
